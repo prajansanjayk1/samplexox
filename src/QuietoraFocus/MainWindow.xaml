@@ -1,0 +1,1710 @@
+<Window x:Class="QuietoraFocus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:QuietoraFocus.ViewModels"
+        xmlns:models="clr-namespace:QuietoraFocus.Core.Models;assembly=QuietoraFocus.Core"
+        Title="Quietora Focus — Digital Detox &amp; Focus OS (Regain for Windows)" Width="1320" Height="840"
+        MinWidth="1100" MinHeight="720" WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ThemeWindowBg}" FontFamily="Segoe UI"
+        Closing="Window_Closing">
+
+  <Window.DataContext>
+    <vm:MainViewModel/>
+  </Window.DataContext>
+
+  <Window.InputBindings>
+    <KeyBinding Modifiers="Control" Key="K" Command="{Binding OpenPaletteCommand}"/>
+    <KeyBinding Key="Escape" Command="{Binding ClosePaletteCommand}"/>
+  </Window.InputBindings>
+
+  <Grid>
+    <!-- ROOT GRID (3 ROWS: Header, Content, Status Bar) -->
+    <Grid.RowDefinitions>
+      <RowDefinition Height="64"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- TOP HEADER -->
+    <Border Grid.Row="0" Background="{DynamicResource ThemeSidebarBg}" Padding="20,0">
+      <Grid VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Brand Logo -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <Border Background="#10B981" CornerRadius="8" Width="36" Height="36" Margin="0,0,12,0">
+            <TextBlock Text="Q" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <StackPanel>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="QUIETORA LABS" FontSize="9" FontWeight="Bold" Foreground="#6EE7B7" Margin="0,0,6,0"/>
+              <Border Background="#065F46" CornerRadius="4" Padding="4,1">
+                <TextBlock Text="REGAIN EDITION" FontSize="8" FontWeight="Bold" Foreground="#A7F3D0"/>
+              </Border>
+            </StackPanel>
+            <TextBlock Text="Quietora Focus" FontSize="17" FontWeight="Bold" Foreground="White"/>
+          </StackPanel>
+        </StackPanel>
+
+        <!-- Center Bar: Ambient Soundscape Quick-Controller & Command Palette -->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <!-- Command Palette Button -->
+          <Button Command="{Binding OpenPaletteCommand}" Background="#1E293B" BorderBrush="#334155" BorderThickness="1"
+                  Padding="14,6" Margin="0,0,12,0" Cursor="Hand" Style="{StaticResource SecondaryButton}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="🔍  Search or command  " Foreground="#94A3B8" FontSize="11"/>
+              <Border Background="#334155" CornerRadius="4" Padding="4,1">
+                <TextBlock Text="Ctrl+K" Foreground="#E2E8F0" FontSize="10" FontWeight="SemiBold"/>
+              </Border>
+            </StackPanel>
+          </Button>
+
+          <!-- Ambient Sound Quick Selector Pill -->
+          <Border Background="#1E293B" BorderBrush="#334155" BorderThickness="1" CornerRadius="16" Padding="10,4" Margin="0,0,12,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <TextBlock Text="🎧 Ambient:" Foreground="#94A3B8" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+              <ComboBox SelectedValue="{Binding SelectedAmbientSound}" Width="135" Height="24" FontSize="11" Margin="0,0,6,0"
+                        Background="#0F172A" Foreground="{DynamicResource ThemeTextPrimary}">
+                <models:AmbientSoundType>None</models:AmbientSoundType>
+                <models:AmbientSoundType>BrownNoise</models:AmbientSoundType>
+                <models:AmbientSoundType>GentleRain</models:AmbientSoundType>
+                <models:AmbientSoundType>WhiteNoise</models:AmbientSoundType>
+                <models:AmbientSoundType>BinauralGamma40Hz</models:AmbientSoundType>
+                <models:AmbientSoundType>BinauralAlpha10Hz</models:AmbientSoundType>
+              </ComboBox>
+              <Button Content="{Binding IsAmbientSoundPlaying, Converter={StaticResource BoolToVis}, ConverterParameter=invert, FallbackValue='▶'}"
+                      Command="{Binding ToggleAmbientSoundCommand}" Style="{StaticResource PrimaryButton}" Padding="8,2" FontSize="10"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Active Timer Pill -->
+          <Border Background="#312E81" BorderBrush="#6366F1" BorderThickness="1" CornerRadius="16" Padding="12,5"
+                  Visibility="{Binding IsSessionActive, Converter={StaticResource BoolToVis}}">
+            <StackPanel Orientation="Horizontal">
+              <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center"/>
+              <TextBlock Text="{Binding TimerDisplay}" Foreground="White" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <!-- Right Header Status Badges -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+          <Border Background="#064E3B" CornerRadius="12" Padding="10,5" Margin="0,0,10,0">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="● DETOX SHIELD ON" Foreground="#34D399" FontSize="11" FontWeight="Bold"/>
+            </StackPanel>
+          </Border>
+          <Button Content="Quick Focus" Command="{Binding QuickStartCommand}" Style="{StaticResource PrimaryButton}" Padding="12,6" FontSize="11"
+                  Visibility="{Binding IsSessionActive, Converter={StaticResource BoolToVis}, ConverterParameter=invert}"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- MAIN BODY: SIDEBAR + CONTENT -->
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="235"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- LEFT SIDEBAR -->
+      <Border Grid.Column="0" Background="{DynamicResource ThemeSidebarBg}" BorderBrush="#1E293B" BorderThickness="0,1,1,0" Padding="10,12">
+        <DockPanel LastChildFill="True">
+          <!-- Bottom Brand / Version -->
+          <Border DockPanel.Dock="Bottom" Background="#1E293B" CornerRadius="8" Padding="10,8" Margin="0,8,0,0">
+            <StackPanel>
+              <TextBlock Text="Quietora Focus v4.0" FontSize="11" FontWeight="Bold" Foreground="#E2E8F0"/>
+              <TextBlock Text="Student OS &amp; Shield • 100% Offline" FontSize="10" Foreground="#94A3B8"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Navigation Links -->
+          <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+              <!-- Student OS & Focus Section -->
+              <TextBlock Text="STUDENT OS &amp; SHIELDS" FontSize="10" FontWeight="Bold" Foreground="#6EE7B7" Margin="14,6,0,4"/>
+              <Button Content="🏠   Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Style="{StaticResource NavButton}"/>
+              <Button Content="⏱️   Focus Studio" Command="{Binding NavigateCommand}" CommandParameter="Focus" Style="{StaticResource NavButton}"/>
+              <Button Content="🎮   Game Shield" Command="{Binding NavigateCommand}" CommandParameter="GameShield" Style="{StaticResource NavButton}"/>
+              <Button Content="🛡️   Safe Browsing &amp; DNS" Command="{Binding NavigateCommand}" CommandParameter="SafeBrowsing" Style="{StaticResource NavButton}"/>
+              <Button Content="🚫   Shorts &amp; Reels Shield" Command="{Binding NavigateCommand}" CommandParameter="Shorts" Style="{StaticResource NavButton}"/>
+              <Button Content="🧘   Screen Time &amp; Budgets" Command="{Binding NavigateCommand}" CommandParameter="Detox" Style="{StaticResource NavButton}"/>
+              <Button Content="👥   Quietora Together" Command="{Binding NavigateCommand}" CommandParameter="Together" Style="{StaticResource NavButton}"/>
+
+              <Separator Background="#1E293B" Margin="6,6"/>
+
+              <!-- Academic Workspace -->
+              <TextBlock Text="ACADEMIC WORKSPACE" FontSize="10" FontWeight="Bold" Foreground="#A5B4FC" Margin="14,6,0,4"/>
+              <Button Content="📚   Syllabus &amp; Subjects" Command="{Binding NavigateCommand}" CommandParameter="Planner" Style="{StaticResource NavButton}"/>
+              <Button Content="📝   Assignments" Command="{Binding NavigateCommand}" CommandParameter="Assignments" Style="{StaticResource NavButton}"/>
+              <Button Content="🎯   Exams &amp; Flashcards" Command="{Binding NavigateCommand}" CommandParameter="Exams" Style="{StaticResource NavButton}"/>
+              <Button Content="🧠   Study AI (Grounded)" Command="{Binding NavigateCommand}" CommandParameter="StudyAI" Style="{StaticResource NavButton}"/>
+              <Button Content="✅   Tasks &amp; Goals" Command="{Binding NavigateCommand}" CommandParameter="Tasks" Style="{StaticResource NavButton}"/>
+              <Button Content="💼   Resume Workspace" Command="{Binding NavigateCommand}" CommandParameter="Workspace" Style="{StaticResource NavButton}"/>
+
+              <Separator Background="#1E293B" Margin="6,6"/>
+
+              <!-- Intelligence & Tools -->
+              <TextBlock Text="ANALYTICS &amp; SYSTEM" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="14,6,0,4"/>
+              <Button Content="📊   Productivity Analytics" Command="{Binding NavigateCommand}" CommandParameter="Analytics" Style="{StaticResource NavButton}"/>
+              <Button Content="🤖   AI Workspace Assistant" Command="{Binding NavigateCommand}" CommandParameter="AIAssistant" Style="{StaticResource NavButton}"/>
+              <Button Content="📁   PC Memory Search" Command="{Binding NavigateCommand}" CommandParameter="Memory" Style="{StaticResource NavButton}"/>
+              <Button Content="⚡   Automations" Command="{Binding NavigateCommand}" CommandParameter="Automation" Style="{StaticResource NavButton}"/>
+              <Button Content="🛡️   Privacy Center" Command="{Binding NavigateCommand}" CommandParameter="Privacy" Style="{StaticResource NavButton}"/>
+              <Button Content="⚙️   Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButton}"/>
+            </StackPanel>
+          </ScrollViewer>
+        </DockPanel>
+      </Border>
+
+      <!-- CONTENT AREA -->
+      <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Padding="26,20">
+        <Grid>
+
+          <!-- 1. DIGITAL DETOX & SCREEN TIME PAGE (REGAIN DASHBOARD) -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Detox}">
+            <TextBlock Text="Digital Detox &amp; Screen Time Manager" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Rewire dopamine habits, set daily screen time limits, and stop endless doomscrolling on Windows." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Hero Detox Stats Row -->
+            <Grid Margin="0,0,0,20">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.1*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <!-- Detox Score Gauge -->
+              <Border Grid.Column="0" Style="{StaticResource CardBorder}" Background="#064E3B" BorderBrush="#059669">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="DIGITAL DETOX SCORE" FontSize="11" FontWeight="Bold" Foreground="#A7F3D0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,2">
+                      <TextBlock Text="{Binding DetoxReport.DetoxScore}" FontSize="38" FontWeight="Bold" Foreground="White"/>
+                      <TextBlock Text=" / 100" FontSize="18" FontWeight="SemiBold" Foreground="#6EE7B7" VerticalAlignment="Bottom" Margin="0,0,0,6"/>
+                    </StackPanel>
+                    <TextBlock Text="Brain dopamine regulated" FontSize="12" Foreground="#D1FAE5"/>
+                  </StackPanel>
+                  <TextBlock Grid.Column="1" Text="🧘" FontSize="44" VerticalAlignment="Center"/>
+                </Grid>
+              </Border>
+
+              <!-- Dopamine Time Saved -->
+              <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <TextBlock Text="DOPAMINE TIME SAVED" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding DetoxReport.TimeSavedFormatted}" FontSize="30" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding DetoxReport.DoomscrollsAvertedToday, StringFormat='{}{0} impulses intercepted'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                </StackPanel>
+              </Border>
+
+              <!-- Bedtime / Night Shield -->
+              <Border Grid.Column="4" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <TextBlock Text="NIGHT SLEEP SHIELD" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <StackPanel Orientation="Horizontal" Margin="0,6,0,4">
+                    <TextBlock Text="🌙 22:30 – 07:00" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                  </StackPanel>
+                  <CheckBox Content="Active (No bed scrolling)" IsChecked="{Binding BedtimeShieldEnabled}" FontSize="11" FontWeight="SemiBold"/>
+                </StackPanel>
+              </Border>
+            </Grid>
+
+            <!-- Mindful Tip Banner -->
+            <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeInputBorder}" BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,0,0,20">
+              <TextBlock Text="{Binding DetoxReport.MindfulTip}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+            </Border>
+
+            <!-- Daily Screen Time App & Web Budgets -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,20">
+              <StackPanel>
+                <Grid Margin="0,0,0,12">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="Daily Screen Time Budgets" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="Apps and websites automatically lock when daily quota is reached:" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  </StackPanel>
+                </Grid>
+
+                <!-- Budgets List -->
+                <ItemsControl ItemsSource="{Binding AppBudgets}" Margin="0,0,0,16">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14,10" Margin="0,4">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <CheckBox IsChecked="{Binding IsActive}" Command="{Binding DataContext.ToggleBudgetCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="{Binding TargetName}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                          </StackPanel>
+
+                          <!-- Progress Bar -->
+                          <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0">
+                            <ProgressBar Value="{Binding UsagePercent, Mode=OneWay}" Height="7" Maximum="100"
+                                         Foreground="{Binding IsQuotaExceeded, Converter={StaticResource PriorityColor}}"/>
+                            <TextBlock Text="{Binding StatusLabel}" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,3,0,0"/>
+                          </StackPanel>
+
+                          <!-- Time used text -->
+                          <TextBlock Grid.Column="3" Text="{Binding UsedMinutesToday, StringFormat='{}{0} / '}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                          <TextBlock Grid.Column="3" Text="{Binding DailyLimitMinutes, StringFormat='{}{0}m'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="30,0,0,0"/>
+
+                          <Button Grid.Column="4" Content="Delete" Command="{Binding DataContext.DeleteBudgetCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding Id}" Style="{StaticResource SecondaryButton}" Padding="8,4" FontSize="10" Margin="10,0,0,0"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Add New Budget Form -->
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewBudgetTargetName, UpdateSourceTrigger=PropertyChanged}" ToolTip="Domain or Process (e.g. youtube.com or discord)"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewBudgetDisplayName, UpdateSourceTrigger=PropertyChanged}" ToolTip="Friendly Label"/>
+                  <TextBox Grid.Column="4" Style="{StaticResource ModernInput}" Text="{Binding NewBudgetLimitMinutes, UpdateSourceTrigger=PropertyChanged}" ToolTip="Minutes/day"/>
+                  <Button Grid.Column="6" Content="+ Set Limit" Command="{Binding AddBudgetCommand}" Style="{StaticResource PrimaryButton}"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Intercept Mode Settings -->
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Distraction Interception Behavior" Style="{StaticResource SectionTitle}"/>
+                <WrapPanel>
+                  <RadioButton Content="🔥 Hardcore / Hell Mode (Closes tab with Ctrl+W and minimizes window in 1s)" IsChecked="True" GroupName="IntGroup" Margin="0,0,20,8"/>
+                  <RadioButton Content="🧘 Mindful Friction (5-second breathing pause &amp; intention check)" GroupName="IntGroup" Margin="0,0,20,8"/>
+                  <RadioButton Content="⏳ Quota Lock Only (Allow browsing until daily budget is exceeded)" GroupName="IntGroup" Margin="0,0,20,8"/>
+                </WrapPanel>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 2. SHORTS & REELS SHIELD PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Shorts}">
+            <TextBlock Text="Short-Form Video &amp; Doomscroll Shield" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Laser-targeted blocks for addictive vertical feeds without disabling educational tutorials or work resources." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,20">
+              <StackPanel>
+                <TextBlock Text="Targeted Feed Interceptors" Style="{StaticResource SectionTitle}"/>
+
+                <!-- Intercept Action Mode -->
+                <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="0,0,0,14">
+                  <StackPanel>
+                    <TextBlock Text="🛡️ Shield Enforcement Mode" FontWeight="Bold" FontSize="12" Margin="0,0,0,6"/>
+                    <WrapPanel>
+                      <RadioButton Content="🔥 Hell Mode (Instant Tab Close &amp; Minimize)" IsChecked="{Binding IsHardcoreCloseMode}" GroupName="InterceptModeShorts" Margin="0,0,16,4" FontWeight="SemiBold"/>
+                      <RadioButton Content="🧘 Regain Mindful Friction (5s Breathing Pause)" IsChecked="{Binding IsMindfulFrictionMode}" GroupName="InterceptModeShorts" Margin="0,0,16,4" FontWeight="SemiBold"/>
+                    </WrapPanel>
+                  </StackPanel>
+                </Border>
+
+                <Border Background="#FEF2F2" BorderBrush="#F87171" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,16">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                      <TextBlock Text="🎯 Selective Shorts &amp; Reels Only Mode" FontWeight="Bold" FontSize="13" Foreground="#DC2626"/>
+                      <TextBlock Text="When enabled, Quietora allows educational YouTube &amp; Instagram lectures, but instantly closes when you click 'Shorts' or 'Reels'!" FontSize="11" Foreground="#991B1B" Margin="0,3,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <CheckBox Grid.Column="1" Content="Enabled" IsChecked="{Binding BlockShortsAndReelsOnly}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                  </Grid>
+                </Border>
+
+                <!-- Pre-Configured Feeds -->
+                <Grid Margin="0,4">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Border Grid.Column="0" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="0,0,8,0">
+                    <StackPanel>
+                      <TextBlock Text="📺 YouTube Shorts" FontWeight="Bold" FontSize="13"/>
+                      <TextBlock Text="Intercepts /shorts/ and #shorts video streams in Chrome, Edge, Firefox, Brave." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
+                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                  </Border>
+
+                  <Border Grid.Column="1" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="8,0,0,0">
+                    <StackPanel>
+                      <TextBlock Text="📸 Instagram Reels &amp; Explore" FontWeight="Bold" FontSize="13"/>
+                      <TextBlock Text="Intercepts infinite Reels reels/ feeds and algorithmic Explore tabs." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
+                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                  </Border>
+                </Grid>
+
+                <Grid Margin="0,12,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Border Grid.Column="0" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="0,0,8,0">
+                    <StackPanel>
+                      <TextBlock Text="🎵 TikTok Web" FontWeight="Bold" FontSize="13"/>
+                      <TextBlock Text="Intercepts all TikTok desktop sessions immediately." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
+                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                  </Border>
+
+                  <Border Grid.Column="1" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="8,0,0,0">
+                    <StackPanel>
+                      <TextBlock Text="🤖 Reddit Endless Feeds" FontWeight="Bold" FontSize="13"/>
+                      <TextBlock Text="Blocks r/popular and infinite frontpage doomscrolling." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
+                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                  </Border>
+                </Grid>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 3. VIRTUAL COWORKING LOUNGE (REGAIN FOCUS ROOMS) -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Cowork}">
+            <TextBlock Text="Virtual Co-Working Lounge" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Study and work alongside focused peers for gentle social accountability." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,20">
+              <StackPanel>
+                <Grid Margin="0,0,0,12">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="Active Study Room" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="Current Room: 🏛️ Silent Deep Work Library" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  </StackPanel>
+                  <Button Grid.Column="1" Content="Start Focus Session" Command="{Binding QuickStartCommand}" Style="{StaticResource PrimaryButton}"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding CoworkingPeers}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14,12" Margin="0,4">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <TextBlock Text="{Binding AvatarEmoji}" FontSize="24" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="{Binding Status}" FontSize="11" Foreground="#10B981" FontWeight="SemiBold"/>
+                          </StackPanel>
+                          <TextBlock Grid.Column="2" Text="{Binding ActiveTask}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
+                          <TextBlock Grid.Column="3" Text="{Binding TodayStreakDays, StringFormat='🔥 {0} day streak'}" FontSize="12" FontWeight="SemiBold" Foreground="#F59E0B" VerticalAlignment="Center"/>
+                          <Border Grid.Column="4" Background="#065F46" CornerRadius="6" Padding="8,4" VerticalAlignment="Center">
+                            <TextBlock Text="LIVE" Foreground="#34D399" FontSize="10" FontWeight="Bold"/>
+                          </Border>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 4. FOCUS STUDIO PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Focus}">
+            <TextBlock Text="Focus Studio" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Multi-mode focus engine with ambient audio soundscapes and strict distraction interception." Style="{StaticResource PageSubtitle}"/>
+
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <!-- Main Clock & Controls -->
+              <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <!-- Mode Selector -->
+                  <TextBlock Text="Focus Technique" Style="{StaticResource SectionTitle}"/>
+                  <WrapPanel Margin="0,0,0,16">
+                    <RadioButton Content="Deep Focus (50m)" IsChecked="True" GroupName="ModeGroup" Margin="0,0,14,8"/>
+                    <RadioButton Content="Pomodoro (25m / 5m)" GroupName="ModeGroup" Margin="0,0,14,8"/>
+                    <RadioButton Content="Study Mode (Subject)" GroupName="ModeGroup" Margin="0,0,14,8"/>
+                    <RadioButton Content="Work Mode (Project)" GroupName="ModeGroup" Margin="0,0,14,8"/>
+                  </WrapPanel>
+
+                  <!-- Big Clock Display -->
+                  <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="16" Padding="20" Margin="0,0,0,16">
+                    <StackPanel HorizontalAlignment="Center">
+                      <TextBlock Text="{Binding TimerDisplay}" FontSize="74" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
+                      <TextBlock Text="{Binding TimerSubText}" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" HorizontalAlignment="Center" Margin="0,4,0,12"/>
+                      <ProgressBar Value="{Binding TimerProgress, Mode=OneWay}" Height="8" Width="360" Minimum="0" Maximum="100" Foreground="{DynamicResource ThemeAccent}" Background="#E2E8F0"/>
+                    </StackPanel>
+                  </Border>
+
+                  <!-- Inputs -->
+                  <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="2*"/>
+                      <ColumnDefinition Width="10"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                      <TextBlock Text="Objective / Goal" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                      <TextBox Style="{StaticResource ModernInput}" Text="{Binding CurrentTaskInput, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                      <TextBlock Text="Subject / Category" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                      <TextBox Style="{StaticResource ModernInput}" Text="{Binding CurrentSubjectInput, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                  </Grid>
+
+                  <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="120"/>
+                      <ColumnDefinition Width="10"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                      <TextBlock Text="Minutes" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                      <TextBox Style="{StaticResource ModernInput}" Text="{Binding SessionMinutesInput, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                      <TextBlock Text="Session Notes (optional)" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                      <TextBox Style="{StaticResource ModernInput}" Text="{Binding SessionNotesInput, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                  </Grid>
+
+                  <!-- Buttons -->
+                  <WrapPanel Margin="0,0,0,12">
+                    <Button Content="Start Focus Session" Command="{Binding StartSessionCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="Pause" Command="{Binding PauseSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="Resume" Command="{Binding ResumeSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="End Session" Command="{Binding StopSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="Emergency Stop" Command="{Binding EmergencyStopCommand}" Style="{StaticResource DangerButton}" Margin="0,0,0,8"/>
+                  </WrapPanel>
+
+                  <TextBlock Text="{Binding StatusMessage}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap"/>
+                </StackPanel>
+              </Border>
+
+              <!-- Ambient Audio & Distraction Rules -->
+              <StackPanel Grid.Column="2">
+                <!-- Soundscape Card -->
+                <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+                  <StackPanel>
+                    <TextBlock Text="🎧 Ambient Focus Soundscapes" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="Synthesized procedurally in pure .NET without external downloads:" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,10"/>
+
+                    <WrapPanel Margin="0,0,0,10">
+                      <Button Content="Brown Noise" Command="{Binding SelectAmbientSoundCommand}" CommandParameter="BrownNoise" Style="{StaticResource SecondaryButton}" Padding="10,5" FontSize="11" Margin="0,0,6,6"/>
+                      <Button Content="Gentle Rain" Command="{Binding SelectAmbientSoundCommand}" CommandParameter="GentleRain" Style="{StaticResource SecondaryButton}" Padding="10,5" FontSize="11" Margin="0,0,6,6"/>
+                      <Button Content="40Hz Gamma Beats" Command="{Binding SelectAmbientSoundCommand}" CommandParameter="BinauralGamma40Hz" Style="{StaticResource SecondaryButton}" Padding="10,5" FontSize="11" Margin="0,0,6,6"/>
+                      <Button Content="10Hz Alpha Beats" Command="{Binding SelectAmbientSoundCommand}" CommandParameter="BinauralAlpha10Hz" Style="{StaticResource SecondaryButton}" Padding="10,5" FontSize="11" Margin="0,0,6,6"/>
+                      <Button Content="Mute Sound" Command="{Binding SelectAmbientSoundCommand}" CommandParameter="None" Style="{StaticResource DangerButton}" Padding="10,5" FontSize="11" Margin="0,0,0,6"/>
+                    </WrapPanel>
+
+                    <TextBlock Text="{Binding SelectedAmbientSound, StringFormat='Active: {0}'}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
+                  </StackPanel>
+                </Border>
+
+                <!-- Process block list card -->
+                <Border Style="{StaticResource CardBorder}">
+                  <StackPanel>
+                    <TextBlock Text="Blocked Applications" Style="{StaticResource SectionTitle}"/>
+                    <DockPanel Margin="0,0,0,8">
+                      <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddBlockedAppCommand}" Style="{StaticResource PrimaryButton}" Padding="10,4" Margin="6,0,0,0"/>
+                      <TextBox Style="{StaticResource ModernInput}" Text="{Binding NewBlockedAppName, UpdateSourceTrigger=PropertyChanged}"/>
+                    </DockPanel>
+
+                    <ListBox ItemsSource="{Binding BlockedApps}" MaxHeight="80" Background="Transparent" BorderBrush="{DynamicResource ThemeInputBorder}">
+                      <ListBox.ItemTemplate>
+                        <DataTemplate>
+                          <Grid Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="*"/>
+                              <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding}" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11"/>
+                            <Button Grid.Column="1" Content="Remove" Command="{Binding DataContext.RemoveBlockedAppCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}" Style="{StaticResource SecondaryButton}" Padding="6,2" FontSize="9"/>
+                          </Grid>
+                        </DataTemplate>
+                      </ListBox.ItemTemplate>
+                    </ListBox>
+                  </StackPanel>
+                </Border>
+
+                <!-- Blocked Websites & Domains -->
+                <Border Style="{StaticResource CardBorder}" Margin="0,12,0,0">
+                  <StackPanel>
+                    <TextBlock Text="Blocked Websites &amp; Distractions" Style="{StaticResource SectionTitle}"/>
+                    <DockPanel Margin="0,0,0,8">
+                      <Button DockPanel.Dock="Right" Content="Add Site" Command="{Binding AddBlockedWebsiteCommand}" Style="{StaticResource PrimaryButton}" Padding="10,4" Margin="6,0,0,0"/>
+                      <TextBox Style="{StaticResource ModernInput}" Text="{Binding NewBlockedWebsiteDomain, UpdateSourceTrigger=PropertyChanged}"/>
+                    </DockPanel>
+
+                    <ListBox ItemsSource="{Binding BlockedWebsites}" MaxHeight="120" Background="Transparent" BorderBrush="{DynamicResource ThemeInputBorder}">
+                      <ListBox.ItemTemplate>
+                        <DataTemplate>
+                          <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="Auto"/>
+                              <ColumnDefinition Width="*"/>
+                              <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox IsChecked="{Binding IsActive}" Command="{Binding DataContext.ToggleBlockedWebsiteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      CommandParameter="{Binding}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                              <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="11" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                              <TextBlock Text="{Binding Domain}" FontSize="9" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                            </StackPanel>
+                            <Button Grid.Column="2" Content="Remove" Command="{Binding DataContext.RemoveBlockedWebsiteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding Domain}" Style="{StaticResource SecondaryButton}" Padding="6,2" FontSize="9"/>
+                          </Grid>
+                        </DataTemplate>
+                      </ListBox.ItemTemplate>
+                    </ListBox>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </Grid>
+          </StackPanel>
+
+          <!-- 5. OVERVIEW DASHBOARD PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Dashboard}">
+            <TextBlock Text="Productivity Dashboard" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Summary of active focus time, daily streak, and tasks." Style="{StaticResource PageSubtitle}"/>
+
+            <Grid Margin="0,0,0,20">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <TextBlock Text="TODAY'S FOCUS" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding Metrics.TodayFocusMinutes, StringFormat='{}{0} mins'}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4,0,2"/>
+                  <TextBlock Text="Active concentration" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                </StackPanel>
+              </Border>
+
+              <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <TextBlock Text="DAILY STREAK" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding Metrics.CurrentStreakDays, StringFormat='{}{0} days'}" FontSize="26" FontWeight="Bold" Foreground="#F59E0B" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding Metrics.BestStreakDays, StringFormat='Best: {0} days'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                </StackPanel>
+              </Border>
+
+              <Border Grid.Column="4" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <TextBlock Text="COMPLETED TASKS" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding Metrics.CompletedTasksCount}" FontSize="26" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding Metrics.PendingTasksCount, StringFormat='{}{0} pending'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                </StackPanel>
+              </Border>
+            </Grid>
+
+            <!-- Recent Sessions DataGrid -->
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Recent Focus History" Style="{StaticResource SectionTitle}"/>
+                <DataGrid ItemsSource="{Binding RecentSessions}" AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" CanUserDeleteRows="False" GridLinesVisibility="Horizontal"
+                          BorderThickness="0" RowHeight="36" HeadersVisibility="Column"
+                          Background="Transparent" FontSize="12" MaxHeight="260">
+                  <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date" Binding="{Binding DateLabel}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Task" Binding="{Binding Task}" Width="2*"/>
+                    <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="*"/>
+                    <DataGridTextColumn Header="Time" Binding="{Binding DurationLabel}" Width="*"/>
+                    <DataGridTextColumn Header="Result" Binding="{Binding ResultLabel}" Width="1.2*"/>
+                  </DataGrid.Columns>
+                </DataGrid>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 6. AI ASSISTANT PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=AIAssistant}">
+            <TextBlock Text="AI Workspace Assistant" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="100% on-device intelligent assistant grounded in your local documents, focus sessions, and tasks." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16" MinHeight="360" MaxHeight="460">
+              <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding AiChatMessages}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border CornerRadius="12" Padding="14,10" Margin="0,4" Background="{DynamicResource ThemeHoverBg}">
+                        <StackPanel>
+                          <Grid Margin="0,0,0,4">
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="*"/>
+                              <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Sender}" FontWeight="Bold" FontSize="11" Foreground="{DynamicResource ThemeAccent}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding TimestampUtc, StringFormat='{}{0:HH:mm}'}" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                          </Grid>
+                          <TextBlock Text="{Binding Content}" FontSize="13" LineHeight="19" Foreground="{DynamicResource ThemeTextPrimary}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="10"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding AiQueryInput, UpdateSourceTrigger=PropertyChanged}" Height="40"/>
+                <Button Grid.Column="2" Content="Ask AI" Command="{Binding SendAiQueryCommand}" Style="{StaticResource PrimaryButton}" Padding="16,8"/>
+              </Grid>
+            </Border>
+          </StackPanel>
+
+          <!-- 7. RESUME MY WORK (WORKSPACE RECOVERY) -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Workspace}">
+            <TextBlock Text="Contextual Work Recovery — Resume My Work" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Snapshot your active projects, recent documents, and tasks to resume seamlessly." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Snapshot Project Directory" Style="{StaticResource SectionTitle}"/>
+                <Grid Margin="0,0,0,8">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewSnapshotRoot, UpdateSourceTrigger=PropertyChanged}" ToolTip="Directory path"/>
+                  <Button Grid.Column="2" Content="Browse Folder..." Command="{Binding BrowseWorkspaceFolderCommand}" Style="{StaticResource SecondaryButton}"/>
+                </Grid>
+                <Grid Margin="0,0,0,10">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="2*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewSnapshotName, UpdateSourceTrigger=PropertyChanged}" ToolTip="Workspace Label"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewSnapshotNotes, UpdateSourceTrigger=PropertyChanged}" ToolTip="Next objectives / Notes"/>
+                </Grid>
+                <Button Content="Save Snapshot" Command="{Binding CreateWorkspaceSnapshotCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left"/>
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Saved Workspaces" Style="{StaticResource SectionTitle}"/>
+                <ItemsControl ItemsSource="{Binding WorkspaceSnapshots}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14,10" Margin="0,4">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding RootDirectory}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                            <TextBlock Text="{Binding Notes}" FontSize="12" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,2,0,0"/>
+                          </StackPanel>
+                          <Button Grid.Column="1" Content="Resume in Explorer" Command="{Binding DataContext.ResumeWorkspaceCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding}" Style="{StaticResource PrimaryButton}" Padding="10,5" FontSize="11" VerticalAlignment="Center"/>
+                          <Button Grid.Column="3" Content="Delete" Command="{Binding DataContext.DeleteWorkspaceCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding Id}" Style="{StaticResource SecondaryButton}" Padding="8,5" FontSize="11" VerticalAlignment="Center"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 8. TASKS & GOALS PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Tasks}">
+            <TextBlock Text="Tasks &amp; Goals" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Organize objectives and deadlines directly alongside your focus sessions." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="2*"/>
+                  <ColumnDefinition Width="10"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="10"/>
+                  <ColumnDefinition Width="80"/>
+                  <ColumnDefinition Width="10"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewTaskTitle, UpdateSourceTrigger=PropertyChanged}" ToolTip="Task Title"/>
+                <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewTaskSubject, UpdateSourceTrigger=PropertyChanged}" ToolTip="Subject"/>
+                <TextBox Grid.Column="4" Style="{StaticResource ModernInput}" Text="{Binding NewTaskMinutes, UpdateSourceTrigger=PropertyChanged}" ToolTip="Est. Mins"/>
+                <Button Grid.Column="6" Content="Add Task" Command="{Binding CreateTaskCommand}" Style="{StaticResource PrimaryButton}"/>
+              </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+              <ItemsControl ItemsSource="{Binding AllTasks}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="8" Padding="12,8" Margin="0,3">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{Binding IsCompleted, Mode=OneWay}" Command="{Binding DataContext.ToggleTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding Id}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="13"/>
+                          <TextBlock Text="{Binding Subject}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="{Binding EstimatedMinutes, StringFormat='{}{0}m'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center" Margin="10,0"/>
+                        <Button Grid.Column="3" Content="✕" Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding Id}" Style="{StaticResource SecondaryButton}" Padding="6,2" FontSize="10"/>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Border>
+          </StackPanel>
+
+          <!-- 9. PERSONAL PC MEMORY PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Memory}">
+            <TextBlock Text="Personal PC Memory" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="100% on-device SQLite FTS5 search across your approved folders." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Approved Folders" Style="{StaticResource SectionTitle}"/>
+                <WrapPanel Margin="0,0,0,10">
+                  <Button Content="+ Add Approved Folder" Command="{Binding AddMemoryFolderCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,6"/>
+                  <Button Content="⚡ Rebuild Index" Command="{Binding RebuildMemoryIndexCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,6"/>
+                  <Button Content="Clear Index" Command="{Binding ClearMemoryIndexCommand}" Style="{StaticResource DangerButton}" Margin="0,0,0,6"/>
+                </WrapPanel>
+                <TextBlock Text="{Binding IndexedFilesCount, StringFormat='Indexed: {0} files'}" FontSize="11" FontWeight="Bold"/>
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <DockPanel Margin="0,0,0,12">
+                  <Button DockPanel.Dock="Right" Content="Search" Command="{Binding SearchMemoryCommand}" Style="{StaticResource PrimaryButton}" Margin="8,0,0,0"/>
+                  <TextBox Style="{StaticResource ModernInput}" Text="{Binding MemorySearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
+                </DockPanel>
+
+                <ItemsControl ItemsSource="{Binding MemoryResults}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="8" Padding="12,8" Margin="0,3">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <StackPanel>
+                            <TextBlock Text="{Binding FileName}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding Snippet}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap"/>
+                          </StackPanel>
+                          <Button Grid.Column="1" Content="Open" Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding FilePath}" Style="{StaticResource PrimaryButton}" Padding="10,4" FontSize="10" VerticalAlignment="Center"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 10. ANALYTICS PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Analytics}">
+            <TextBlock Text="Analytics &amp; Streaks" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Transparent, formula-driven productivity analysis and time distribution." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Past 7 Days Focus Distribution" Style="{StaticResource SectionTitle}"/>
+                <ItemsControl ItemsSource="{Binding ActivityPoints}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <UniformGrid Columns="7"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="8" Padding="10" Margin="3">
+                        <StackPanel HorizontalAlignment="Center">
+                          <TextBlock Text="{Binding DayName}" FontWeight="Bold" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center"/>
+                          <TextBlock Text="{Binding FocusMinutes, StringFormat='{}{0}m'}" FontSize="18" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Center" Margin="0,6,0,2"/>
+                          <TextBlock Text="{Binding Distractions, StringFormat='{}{0} avers.'}" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Data Export" Style="{StaticResource SectionTitle}"/>
+                <WrapPanel>
+                  <Button Content="Export Sessions (CSV)" Command="{Binding ExportSessionsCsvCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                  <Button Content="Export Tasks (CSV)" Command="{Binding ExportTasksCsvCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                  <Button Content="Export Summary Report" Command="{Binding ExportSummaryReportCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,0,8"/>
+                </WrapPanel>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 11. AUTOMATION PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Automation}">
+            <TextBlock Text="Smart Automations" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Define automated routines for focus schedules, rest breaks, and limits." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}">
+              <ItemsControl ItemsSource="{Binding AutomationRules}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14,10" Margin="0,4">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{Binding IsEnabled}" Command="{Binding DataContext.ToggleAutomationRuleCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13"/>
+                          <TextBlock Text="{Binding Description}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Content="Delete" Command="{Binding DataContext.DeleteAutomationRuleCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding Id}" Style="{StaticResource SecondaryButton}" Padding="8,4" FontSize="10"/>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Border>
+          </StackPanel>
+
+          <!-- 12. PRIVACY CENTER PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Privacy}">
+            <TextBlock Text="Privacy Center" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Quietora is 100% private. No cloud accounts, tracking pixels, or data collection." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Privacy Charter" Style="{StaticResource SectionTitle}"/>
+                <TextBlock FontSize="12" LineHeight="20" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap"
+                           Text="• 100% Local: All screen time, tasks, and notes exist exclusively in local SQLite on your PC.&#x0a;• Zero Telemetry: No outbound HTTP calls, analytics pings, or cloud accounts.&#x0a;• User in Control: Emergency Stop is always active to restore all controls instantly."/>
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Data Management" Style="{StaticResource SectionTitle}"/>
+                <Button Content="Nuclear Wipe — Delete All Local Data" Command="{Binding WipeAllDataCommand}" Style="{StaticResource DangerButton}" HorizontalAlignment="Left"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- 13. SETTINGS PAGE -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Settings}">
+            <TextBlock Text="Settings &amp; Preferences" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Configure theme, startup, and blocking preferences." Style="{StaticResource PageSubtitle}"/>
+
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <CheckBox Content="Enable Dark Mode" IsChecked="{Binding IsDarkMode}" Margin="0,0,0,12" FontSize="12" FontWeight="SemiBold"/>
+                <CheckBox Content="Launch at Windows startup" IsChecked="{Binding IsLaunchAtStartup}" Margin="0,0,0,12" FontSize="12" FontWeight="SemiBold"/>
+                <CheckBox Content="Sound alerts upon session completion" IsChecked="{Binding SoundAlertsEnabled}" Margin="0,0,0,12" FontSize="12" FontWeight="SemiBold"/>
+                <CheckBox Content="Block Shorts &amp; Reels Only (Allow educational study videos)" IsChecked="{Binding BlockShortsAndReelsOnly}" Margin="0,0,0,12" FontSize="12" FontWeight="SemiBold"/>
+                <CheckBox Content="Enable Night Sleep Shield (22:30 – 07:00 bedtime lockdown)" IsChecked="{Binding BedtimeShieldEnabled}" Margin="0,0,0,16" FontSize="12" FontWeight="SemiBold"/>
+
+                <TextBlock Text="Database Path" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                <TextBox Style="{StaticResource ModernInput}" Text="{Binding DatabasePath, Mode=OneWay}" IsReadOnly="True"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 14. GAME SHIELD (GAME RESTRICTION ENGINE)   -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=GameShield}">
+            <TextBlock Text="🎮 Game Shield &amp; Restriction Engine" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Detect and restrict competitive gaming sessions during study hours. Supports Steam, Riot Games, Epic Games, and custom executables." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Game Shield Control Bar -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                  <TextBlock Text="Enforcement Level" Style="{StaticResource SectionTitle}"/>
+                  <TextBlock Text="Choose how Quietora Focus responds when a game launches:" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                  <ComboBox SelectedIndex="{Binding SelectedGameEnforcementLevelIndex}" Height="34" Width="420" HorizontalAlignment="Left">
+                    <ComboBoxItem Content="Level 1: Detection Reminder (Friendly awareness alert)"/>
+                    <ComboBoxItem Content="Level 2: Discouragement &amp; Auto-Minimize (Study discipline)"/>
+                    <ComboBoxItem Content="Level 3: Strict Focus Block (Instant minimize)"/>
+                  </ComboBox>
+                </StackPanel>
+                <Button Grid.Column="1" Content="🔍 Scan Installed Games" Command="{Binding ScanGamesCommand}" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center"/>
+              </Grid>
+            </Border>
+
+            <!-- Add Custom Game Card -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Add Custom Game / Executable" Style="{StaticResource SectionTitle}"/>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewGameName, UpdateSourceTrigger=PropertyChanged}" Tag="Game Name (e.g. Apex Legends)"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewGameProcessName, UpdateSourceTrigger=PropertyChanged}" Tag="Process Name (e.g. r5apex)"/>
+                  <Button Grid.Column="4" Content="+ Add Game" Command="{Binding AddCustomGameCommand}" Style="{StaticResource SecondaryButton}"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Detected Games List -->
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Monitored Games Library" Style="{StaticResource SectionTitle}"/>
+                <ItemsControl ItemsSource="{Binding DetectedGames}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14,10" Margin="0,4">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <TextBlock Grid.Column="0" Text="🎮" FontSize="18" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding GameName}" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="{Binding ProcessName, StringFormat='Process: {0}.exe'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                          </StackPanel>
+                          <Border Grid.Column="2" Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeInputBorder}" BorderThickness="1" CornerRadius="6" Padding="6,2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Launcher}" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource ThemeAccent}"/>
+                          </Border>
+                          <TextBlock Grid.Column="3" Text="{Binding LastLaunchedUtc, StringFormat='Last: {0}'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
+                          <CheckBox Grid.Column="4" Content="Blocked" IsChecked="{Binding IsBlocked}" Command="{Binding DataContext.ToggleGameBlockedCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 15. SAFE BROWSING & FAMILY DNS             -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=SafeBrowsing}">
+            <TextBlock Text="🛡️ Safe Browsing &amp; Adult Content Protection" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Multi-layered protection against explicit websites, adult portals, and malicious advertising across all browsers." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Browser Shield Extension Connection -->
+            <Border Style="{StaticResource CardBorder}" Background="#064E3B" BorderBrush="#059669" Margin="0,0,0,16">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                  <TextBlock Text="Browser Shield Native Extension (Manifest V3)" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                  <TextBlock Text="Synchronized via loopback port 41789. Blocks adult domains with declarativeNetRequest before network request dispatch." FontSize="12" Foreground="#A7F3D0" Margin="0,2,0,8"/>
+                  <CheckBox Content="Enforce Category Adult &amp; Explicit Domain Shield (declarativeNetRequest Priority 2500)" IsChecked="{Binding IsAdultProtectionEnabled}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="🔒" FontSize="36" VerticalAlignment="Center"/>
+              </Grid>
+            </Border>
+
+            <!-- Family-Safe DNS Center -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="System-Wide Family-Safe DNS Resolver" Style="{StaticResource SectionTitle}"/>
+                <TextBlock Text="DNS filtering automatically prevents adult domain resolution across all network apps, background daemons, and browsers." FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,12"/>
+
+                <ComboBox SelectedIndex="{Binding SelectedDnsProviderIndex}" Height="34" Width="380" HorizontalAlignment="Left" Margin="0,0,0,14">
+                  <ComboBoxItem Content="Standard / System Default"/>
+                  <ComboBoxItem Content="Cloudflare Family (1.1.1.3 / 1.0.0.3)"/>
+                  <ComboBoxItem Content="AdGuard Family (94.140.14.15 / 94.140.15.16)"/>
+                  <ComboBoxItem Content="CleanBrowsing (185.228.168.168)"/>
+                </ComboBox>
+
+                <TextBlock Text="PowerShell Setup Command (Copy and run as Administrator in PowerShell):" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                <TextBox Style="{StaticResource ModernInput}" Text="{Binding DnsPowerShellCommand, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MinHeight="60" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal">
+                  <Button Content="📋 Copy DNS Command" Command="{Binding CopyDnsCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,10,0"/>
+                  <Button Content="🔄 Reset to DHCP Default" Command="{Binding ResetDnsCommand}" Style="{StaticResource SecondaryButton}"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Honest Protection Notice -->
+            <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeInputBorder}" BorderThickness="1" CornerRadius="10" Padding="14">
+              <StackPanel>
+                <TextBlock Text="ℹ️ Quietora Safe Browsing Integrity Notice" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,4"/>
+                <TextBlock Text="Category-based DNS and browser shields protect against unintentional exposure and impulsive browsing triggers. Technical bypasses (such as VPNs, DoH, or proxy tunnels) are recognized limitations. Quietora pairs voluntary commitment with system protections without installing destabilizing kernel rootkits." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 16. QUIETORA TOGETHER (STUDY ROOMS)        -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Together}">
+            <TextBlock Text="👥 Quietora Together — Collaborative Study Rooms" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Real-time synchronized study sessions with authoritative timers, presence, and zero-leakage privacy." Style="{StaticResource PageSubtitle}"/>
+
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <!-- Left Column: Active Room / Create or Join -->
+              <StackPanel Grid.Column="0">
+                <!-- If Not In Room -->
+                <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16" Visibility="{Binding IsInTogetherRoom, Converter={StaticResource BoolToVis}, ConverterParameter=Inverse}">
+                  <StackPanel>
+                    <TextBlock Text="Create a Study Room" Style="{StaticResource SectionTitle}"/>
+                    <Grid Margin="0,0,0,10">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewRoomNameInput, UpdateSourceTrigger=PropertyChanged}" Tag="Room Name"/>
+                      <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewRoomSubjectInput, UpdateSourceTrigger=PropertyChanged}" Tag="Subject"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,14">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="110"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewRoomObjectiveInput, UpdateSourceTrigger=PropertyChanged}" Tag="Study Objective"/>
+                      <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewRoomMinutesInput, UpdateSourceTrigger=PropertyChanged}" Tag="Minutes"/>
+                    </Grid>
+                    <Button Content="✨ Create 6-Char Study Room" Command="{Binding CreateTogetherRoomCommand}" Style="{StaticResource PrimaryButton}"/>
+
+                    <Separator Background="{DynamicResource ThemeInputBorder}" Margin="0,16"/>
+
+                    <TextBlock Text="Or Join via Room Code" Style="{StaticResource SectionTitle}"/>
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding JoinRoomCodeInput, UpdateSourceTrigger=PropertyChanged}" Tag="Enter 6-Char Code (e.g. DSA901)"/>
+                      <Button Grid.Column="2" Content="🚀 Join Room" Command="{Binding JoinTogetherRoomCommand}" Style="{StaticResource SecondaryButton}"/>
+                    </Grid>
+                  </StackPanel>
+                </Border>
+
+                <!-- If In Room: Active Room Display -->
+                <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16" Visibility="{Binding IsInTogetherRoom, Converter={StaticResource BoolToVis}}">
+                  <StackPanel>
+                    <Grid Margin="0,0,0,12">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      <StackPanel>
+                        <TextBlock Text="{Binding TogetherRoom.RoomName}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                        <TextBlock Text="{Binding TogetherRoom.Subject, StringFormat='Subject: {0}'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                      </StackPanel>
+                      <Border Grid.Column="1" Background="#065F46" CornerRadius="8" Padding="12,6">
+                        <TextBlock Text="{Binding TogetherRoom.RoomCode, StringFormat='CODE: {0}'}" FontSize="14" FontWeight="Bold" Foreground="#34D399"/>
+                      </Border>
+                    </Grid>
+
+                    <!-- Large Synchronized Timer -->
+                    <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+                      <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding TogetherTimerDisplay}" FontSize="48" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding TogetherRoom.Objective, StringFormat='Objective: {0}'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" Margin="0,4,0,12"/>
+                        <Button Content="▶️ Start Authoritative Timer" Command="{Binding StartTogetherSessionCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Center"/>
+                      </StackPanel>
+                    </Border>
+
+                    <!-- Participants List -->
+                    <TextBlock Text="Room Members" Style="{StaticResource SectionTitle}"/>
+                    <ItemsControl ItemsSource="{Binding TogetherRoom.Participants}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="8" Padding="10,6" Margin="0,3">
+                            <Grid>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                              </Grid.ColumnDefinitions>
+                              <TextBlock Grid.Column="0" Text="{Binding AvatarEmoji}" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                              <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Nickname}" FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                <TextBlock Text="{Binding CurrentTask}" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                              </StackPanel>
+                              <Border Grid.Column="2" Background="#065F46" CornerRadius="4" Padding="6,2">
+                                <TextBlock Text="Ready" FontSize="9" FontWeight="Bold" Foreground="#34D399"/>
+                              </Border>
+                            </Grid>
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+              <!-- Right Column: Room Group Chat -->
+              <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+                <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  <TextBlock Grid.Row="0" Text="Study Room Chat" Style="{StaticResource SectionTitle}"/>
+
+                  <!-- Chat Messages -->
+                  <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,8,0,12" MaxHeight="380">
+                    <ItemsControl ItemsSource="{Binding TogetherRoom.ChatMessages}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="6" Padding="8,6" Margin="0,3">
+                            <StackPanel>
+                              <TextBlock Text="{Binding SenderNickname}" FontWeight="Bold" FontSize="11" Foreground="{DynamicResource ThemeAccent}"/>
+                              <TextBlock Text="{Binding Text}" FontSize="12" Foreground="{DynamicResource ThemeTextPrimary}" TextWrapping="Wrap"/>
+                            </StackPanel>
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </ScrollViewer>
+
+                  <!-- Chat Input -->
+                  <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="8"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding ChatMessageInput, UpdateSourceTrigger=PropertyChanged}" Tag="Message room..."/>
+                    <Button Grid.Column="2" Content="Send" Command="{Binding SendTogetherChatMessageCommand}" Style="{StaticResource PrimaryButton}" Padding="12,8"/>
+                  </Grid>
+                </Grid>
+              </Border>
+            </Grid>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 17. ACADEMIC SYLLABUS & SUBJECT PLANNER    -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Planner}">
+            <TextBlock Text="📚 Academic Syllabus &amp; Subject Planner" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Organize university courses, syllabus chapters, study targets, and completion hours." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Add Subject Form -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Enroll New Subject / Course" Style="{StaticResource SectionTitle}"/>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewSubjectName, UpdateSourceTrigger=PropertyChanged}" Tag="Course Name (e.g. Operating Systems)"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewSubjectCode, UpdateSourceTrigger=PropertyChanged}" Tag="Code (e.g. CS301)"/>
+                  <TextBox Grid.Column="4" Style="{StaticResource ModernInput}" Text="{Binding NewSubjectSemester, UpdateSourceTrigger=PropertyChanged}" Tag="Semester"/>
+                  <TextBox Grid.Column="6" Style="{StaticResource ModernInput}" Text="{Binding NewSubjectHours, UpdateSourceTrigger=PropertyChanged}" Tag="Target Hrs"/>
+                  <Button Grid.Column="8" Content="+ Add Course" Command="{Binding AddSubjectCommand}" Style="{StaticResource PrimaryButton}"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Subjects Cards -->
+            <ItemsControl ItemsSource="{Binding AcademicSubjects}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Style="{StaticResource CardBorder}" Margin="0,0,0,14">
+                    <StackPanel>
+                      <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                          <Border Background="{DynamicResource ThemeAccent}" CornerRadius="6" Padding="8,3" Margin="0,0,10,0">
+                            <TextBlock Text="{Binding Code}" FontSize="11" FontWeight="Bold" Foreground="White"/>
+                          </Border>
+                          <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                          <TextBlock Text="{Binding Semester, StringFormat=' • {0}'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Delete" Command="{Binding DataContext.DeleteSubjectCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource DangerButton}" Padding="8,4" FontSize="11"/>
+                      </Grid>
+
+                      <!-- Progress Row -->
+                      <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ProgressBar Value="{Binding ProgressPercent, Mode=OneWay}" Height="8" Foreground="#10B981" Background="{DynamicResource ThemeInputBorder}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="{Binding CompletedHours, StringFormat='{}{0}h studied'}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="10,0,0,0"/>
+                      </Grid>
+
+                      <!-- Syllabus Topics List -->
+                      <TextBlock Text="Syllabus Topics:" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,4"/>
+                      <ItemsControl ItemsSource="{Binding Topics}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="6" Padding="10,6" Margin="0,2">
+                              <Grid>
+                                <Grid.ColumnDefinitions>
+                                  <ColumnDefinition Width="Auto"/>
+                                  <ColumnDefinition Width="*"/>
+                                  <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                  <TextBlock Text="{Binding Title}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                  <TextBlock Text="{Binding Chapter}" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" Text="{Binding EstimatedMinutes, StringFormat='{}{0} min'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
+                              </Grid>
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </StackPanel>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 18. ACADEMIC ASSIGNMENTS                   -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Assignments}">
+            <TextBlock Text="📝 Academic Assignment Tracker" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Never miss a submission deadline. Organize problem sets, essays, and lab submissions." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Add Assignment Form -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Add New Assignment" Style="{StaticResource SectionTitle}"/>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewAssignmentTitle, UpdateSourceTrigger=PropertyChanged}" Tag="Assignment Title (e.g. Lab 4 Red-Black Trees)"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewAssignmentDescription, UpdateSourceTrigger=PropertyChanged}" Tag="Description / Instructions"/>
+                  <TextBox Grid.Column="4" Style="{StaticResource ModernInput}" Text="{Binding NewAssignmentDaysDue, UpdateSourceTrigger=PropertyChanged}" Tag="Days Due"/>
+                  <Button Grid.Column="6" Content="+ Add Assignment" Command="{Binding AddAssignmentCommand}" Style="{StaticResource PrimaryButton}"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Assignments List -->
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Pending &amp; Submitted Assignments" Style="{StaticResource SectionTitle}"/>
+                <ItemsControl ItemsSource="{Binding AcademicAssignments}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14,10" Margin="0,4">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="{Binding SubjectName, StringFormat='Course: {0}'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                          </StackPanel>
+                          <Border Grid.Column="1" Background="#1E293B" CornerRadius="6" Padding="8,4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding DaysRemaining, StringFormat='{}{0} days left'}" FontSize="11" FontWeight="Bold" Foreground="#38BDF8"/>
+                          </Border>
+                          <Border Grid.Column="2" Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeInputBorder}" BorderThickness="1" CornerRadius="6" Padding="6,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Status}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeAccent}"/>
+                          </Border>
+                          <Button Grid.Column="3" Content="Mark Submitted" Command="{Binding DataContext.CompleteAssignmentCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Style="{StaticResource SecondaryButton}" Padding="10,6" FontSize="11"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 19. EXAMS & SPACED REPETITION (SM-2)       -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Exams}">
+            <TextBlock Text="🎯 Exam Calendar &amp; Spaced Repetition (SuperMemo SM-2)" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Master high-yield concepts using the SuperMemo SM-2 algorithm. Mathematically scheduled review intervals." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Upcoming Exams Row -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <Grid Margin="0,0,0,10">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="Upcoming Examination Deadlines" Style="{StaticResource SectionTitle}"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding AcademicExams}" Margin="0,0,0,12">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="8" Padding="12,8" Margin="0,3">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="120"/>
+                          </Grid.ColumnDefinitions>
+                          <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="{Binding SubjectName}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                          </StackPanel>
+                          <Border Grid.Column="1" Background="#065F46" CornerRadius="6" Padding="8,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding DaysRemaining, StringFormat='⏳ {0} Days Remaining'}" FontSize="11" FontWeight="Bold" Foreground="#34D399"/>
+                          </Border>
+                          <TextBlock Grid.Column="2" Text="{Binding TargetScore, StringFormat='Target: {0}%'}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" VerticalAlignment="Center"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Add Exam Form -->
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewExamTitle, UpdateSourceTrigger=PropertyChanged}" Tag="Exam Title (e.g. Midterm 2)"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewExamDaysDue, UpdateSourceTrigger=PropertyChanged}" Tag="Days Due"/>
+                  <TextBox Grid.Column="4" Style="{StaticResource ModernInput}" Text="{Binding NewExamTargetScore, UpdateSourceTrigger=PropertyChanged}" Tag="Target %"/>
+                  <Button Grid.Column="6" Content="+ Add Exam" Command="{Binding AddExamCommand}" Style="{StaticResource SecondaryButton}"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Spaced Repetition Flashcard Review Deck (SM-2) -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <Grid Margin="0,0,0,12">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="🧠 Interactive Flashcard Deck (SuperMemo SM-2)" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock Text="Interval growth: I(1)=1d, I(2)=6d, I(n)=I(n-1)*EF. Ease factor dynamically recalibrates." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  </StackPanel>
+                  <Border Grid.Column="1" Background="#312E81" CornerRadius="6" Padding="10,4">
+                    <TextBlock Text="{Binding AcademicFlashcards.Count, StringFormat='Cards in Deck: {0}'}" FontSize="11" FontWeight="Bold" Foreground="#A5B4FC"/>
+                  </Border>
+                </Grid>
+
+                <!-- Active Flashcard Reviewer -->
+                <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="12" Padding="24" Margin="0,0,0,16">
+                  <StackPanel>
+                    <TextBlock Text="QUESTION" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,8"/>
+                    <TextBlock Text="{Binding ActiveFlashcard.Question}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" TextWrapping="Wrap" Margin="0,0,0,16"/>
+
+                    <!-- Show Answer Button -->
+                    <Button Content="👁️ Show Answer" Command="{Binding RevealFlashcardAnswerCommand}" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Left" Margin="0,0,0,14" Visibility="{Binding IsFlashcardAnswerRevealed, Converter={StaticResource BoolToVis}, ConverterParameter=Inverse}"/>
+
+                    <!-- Revealed Answer Block -->
+                    <StackPanel Visibility="{Binding IsFlashcardAnswerRevealed, Converter={StaticResource BoolToVis}}">
+                      <Separator Background="{DynamicResource ThemeInputBorder}" Margin="0,0,0,14"/>
+                      <TextBlock Text="ANSWER" FontSize="11" FontWeight="Bold" Foreground="#10B981" Margin="0,0,0,6"/>
+                      <TextBlock Text="{Binding ActiveFlashcard.Answer}" FontSize="15" Foreground="{DynamicResource ThemeTextPrimary}" TextWrapping="Wrap" Margin="0,0,0,16"/>
+
+                      <TextBlock Text="Rate your recall confidence (SM-2):" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                      <StackPanel Orientation="Horizontal">
+                        <Button Content="1 • Blackout" Command="{Binding ReviewFlashcardRatingCommand}" CommandParameter="1" Style="{StaticResource DangerButton}" Margin="0,0,8,0" Padding="12,8"/>
+                        <Button Content="2 • Incorrect" Command="{Binding ReviewFlashcardRatingCommand}" CommandParameter="2" Style="{StaticResource DangerButton}" Margin="0,0,8,0" Padding="12,8"/>
+                        <Button Content="3 • Difficult" Command="{Binding ReviewFlashcardRatingCommand}" CommandParameter="3" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0" Padding="12,8"/>
+                        <Button Content="4 • Good" Command="{Binding ReviewFlashcardRatingCommand}" CommandParameter="4" Style="{StaticResource SecondaryButton}" Margin="0,0,8,0" Padding="12,8"/>
+                        <Button Content="5 • Perfect" Command="{Binding ReviewFlashcardRatingCommand}" CommandParameter="5" Style="{StaticResource PrimaryButton}" Padding="12,8"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+
+                <!-- Add New Flashcard Form -->
+                <TextBlock Text="Add Flashcard to Deck" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,6"/>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Grid.Column="0" Style="{StaticResource ModernInput}" Text="{Binding NewFlashcardQuestion, UpdateSourceTrigger=PropertyChanged}" Tag="Question prompt"/>
+                  <TextBox Grid.Column="2" Style="{StaticResource ModernInput}" Text="{Binding NewFlashcardAnswer, UpdateSourceTrigger=PropertyChanged}" Tag="Answer text"/>
+                  <Button Grid.Column="4" Content="+ Add Card" Command="{Binding AddFlashcardCommand}" Style="{StaticResource SecondaryButton}"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- ========================================== -->
+          <!-- 20. GROUNDED STUDY AI COMPANION            -->
+          <!-- ========================================== -->
+          <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=StudyAI}">
+            <TextBlock Text="🧠 Grounded Study AI Companion" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Deterministic, verified academic summaries, practice exam quizzes, and concept explanations. 100% offline-ready." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Topic Prompt Input & Generation Buttons -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <StackPanel>
+                <TextBlock Text="Enter Academic Topic or Concept" Style="{StaticResource SectionTitle}"/>
+                <Grid Margin="0,0,0,12">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBox Style="{StaticResource ModernInput}" Text="{Binding StudyAiTopicInput, UpdateSourceTrigger=PropertyChanged}" Tag="e.g. Virtual Memory &amp; Paging, Dijkstra Algorithm, Normalization Forms" FontSize="14"/>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal">
+                  <Button Content="📚 Grounded Summary" Command="{Binding GenerateStudySummaryCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,10,0"/>
+                  <Button Content="📝 Practice Exam Quiz" Command="{Binding GeneratePracticeQuizCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,10,0"/>
+                  <Button Content="🧠 Explain Concept &amp; Formulas" Command="{Binding ExplainConceptCommand}" Style="{StaticResource SecondaryButton}"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Output Display Card -->
+            <Border Style="{StaticResource CardBorder}">
+              <StackPanel>
+                <TextBlock Text="Generated Academic Output" Style="{StaticResource SectionTitle}"/>
+                <ScrollViewer MaxHeight="450" VerticalScrollBarVisibility="Auto">
+                  <TextBox Style="{StaticResource ModernInput}" Text="{Binding StudyAiOutput, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" BorderThickness="0" Background="Transparent" FontFamily="Consolas, Segoe UI" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                </ScrollViewer>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+        </Grid>
+      </ScrollViewer>
+    </Grid>
+
+    <!-- BOTTOM STATUS / NOTIFICATION BAR -->
+    <Border Grid.Row="2" Background="{DynamicResource ThemeSidebarBg}" Padding="16,6">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{Binding StatusMessage}" FontSize="11" Foreground="#94A3B8" VerticalAlignment="Center"/>
+
+        <!-- In-app dismissible notification banner -->
+        <Border Grid.Column="1" Background="#065F46" BorderBrush="#10B981" BorderThickness="1" CornerRadius="6" Padding="10,3"
+                Visibility="{Binding IsNotificationVisible, Converter={StaticResource BoolToVis}}">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding NotificationBannerText}" FontSize="11" Foreground="White" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <Button Content="✕" Command="{Binding DismissNotificationCommand}" Style="{StaticResource SecondaryButton}" Padding="4,1" FontSize="9"/>
+          </StackPanel>
+        </Border>
+      </Grid>
+    </Border>
+
+    <!-- MINDFUL FRICTION OVERLAY (REGAIN / ONE SEC BREATHING INTERCEPT) -->
+    <Grid Grid.RowSpan="3" Background="#B0000000" Visibility="{Binding IsMindfulFrictionActive, Converter={StaticResource BoolToVis}}">
+      <Border Width="520" Background="{DynamicResource ThemeCardBg}" BorderBrush="#10B981" BorderThickness="2"
+              CornerRadius="16" Padding="28" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel HorizontalAlignment="Center">
+          <!-- Calm Pulsing Breathing Orb -->
+          <Border Width="72" Height="72" CornerRadius="36" Background="#10B981" Margin="0,0,0,16" HorizontalAlignment="Center">
+            <TextBlock Text="🧘" FontSize="34" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+
+          <TextBlock Text="Take a deep breath..." FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
+          <TextBlock Text="{Binding FrictionCountdownSeconds, StringFormat='Hold and exhale ({0}s)'}" FontSize="13" Foreground="#10B981" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,4,0,12"/>
+
+          <TextBlock Text="{Binding FrictionTargetName, StringFormat='You are about to open {0}'}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
+          <TextBlock Text="{Binding FrictionPrompt}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,20"/>
+
+          <!-- Conscious Action Buttons -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="🌟 Close &amp; Regain Focus" Command="{Binding AcceptFrictionCloseCommand}" Style="{StaticResource PrimaryButton}" Padding="16,8" Margin="0,0,12,0"/>
+            <Button Content="⏳ 2-Min Mindful Break" Command="{Binding TakeTwoMinBreakCommand}" Style="{StaticResource SecondaryButton}" Padding="14,8"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <!-- COMMAND PALETTE MODAL OVERLAY (Ctrl+K) -->
+    <Grid Grid.RowSpan="3" Background="#80000000" Visibility="{Binding IsPaletteOpen, Converter={StaticResource BoolToVis}}">
+      <Border Width="620" MaxHeight="520" Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1"
+              CornerRadius="14" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+          <!-- Header -->
+          <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="⚡ Quick Command Palette" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+            <Button Grid.Column="1" Content="✕" Command="{Binding ClosePaletteCommand}" Style="{StaticResource SecondaryButton}" Padding="8,4" FontSize="11"/>
+          </Grid>
+
+          <!-- Search Query Input -->
+          <Border Grid.Row="1" Background="{DynamicResource ThemeInputBg}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1.5" CornerRadius="8" Padding="10,6" Margin="0,0,0,12">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="🔍 " FontSize="14" VerticalAlignment="Center" Margin="0,0,6,0"/>
+              <TextBox Grid.Column="1" BorderThickness="0" Background="Transparent" FontSize="14"
+                       Text="{Binding PaletteQuery, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+            </Grid>
+          </Border>
+
+          <!-- Filtered Commands List -->
+          <ListBox Grid.Row="2" ItemsSource="{Binding FilteredPaletteCommands}" SelectedItem="{Binding SelectedPaletteCommand}"
+                   MaxHeight="320" Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="8" Padding="12,8" Margin="0,3" Cursor="Hand">
+                  <Grid>
+                    <Grid.InputBindings>
+                      <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.ExecutePaletteCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"/>
+                    </Grid.InputBindings>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="32"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Icon}" FontSize="18" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0">
+                      <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                      <TextBlock Text="{Binding Subtitle}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                    </StackPanel>
+                    <Border Grid.Column="2" Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeInputBorder}" BorderThickness="1" CornerRadius="6" Padding="8,3" VerticalAlignment="Center">
+                      <TextBlock Text="{Binding Category}" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource ThemeAccent}"/>
+                    </Border>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <!-- Palette Footer Note -->
+          <TextBlock Grid.Row="3" Text="Press ESC to close • Click any command to execute instantly" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" Margin="0,12,0,0"/>
+        </Grid>
+      </Border>
+    </Grid>
+
+  </Grid>
+</Window>

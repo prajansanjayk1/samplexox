@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Protected by Quietora Focus</title>
+  <style>
+    :root {
+      --bg: #0F172A;
+      --card: #1E293B;
+      --border: #334155;
+      --text: #F8FAFC;
+      --subtext: #94A3B8;
+      --accent: #4F46E5;
+      --emerald: #10B981;
+      --rose: #EF4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      padding: 36px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--rose);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .badge.adult {
+      background: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 12px; }
+    p { color: var(--subtext); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+    .target-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #38BDF8;
+      margin-bottom: 24px;
+      word-break: break-all;
+    }
+    .pulse-orb {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 24px auto;
+      background: radial-gradient(circle, var(--emerald) 0%, rgba(16, 185, 129, 0) 70%);
+      animation: pulse 3s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+    .btn-group { display: flex; gap: 12px; justify-content: center; }
+    button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: #4338CA; }
+    .btn-secondary { background: #334155; color: var(--text); }
+    .btn-secondary:hover { background: #475569; }
+    .footer { margin-top: 28px; font-size: 11px; color: var(--subtext); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="pulse-orb"></div>
+    <div id="badge" class="badge">🔥 Deep Focus Intercept</div>
+    <h1 id="title">Restricted During Focus</h1>
+    <p id="description">This website is blocked under your active Quietora Focus policy to protect your study flow and eliminate algorithmic doomscrolling.</p>
+    <div id="target" class="target-box">instagram.com</div>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="history.back()">← Return to Study</button>
+      <button class="btn-secondary" onclick="window.close()">Close Tab</button>
+    </div>
+
+    <div class="footer">QuietoraLabs — Quietora Focus v4.0 Student OS</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const reason = params.get('reason');
+    const domain = params.get('domain') || params.get('url') || 'Restricted Site';
+
+    document.getElementById('target').textContent = domain;
+
+    if (reason === 'adult') {
+      document.getElementById('badge').textContent = '🛡️ Adult Content Shield';
+      document.getElementById('badge').className = 'badge adult';
+      document.getElementById('title').textContent = 'Content Filtered';
+      document.getElementById('description').textContent = 'This domain was filtered under your Quietora Safe Browsing protection profile.';
+    } else if (reason === 'shorts') {
+      document.getElementById('badge').textContent = '🎯 Short-Form Doomscroll Averted';
+      document.getElementById('title').textContent = 'Reels & Shorts Shield';
+      document.getElementById('description').textContent = 'Algorithmic vertical feeds are intercepted. Educational long-form lectures and tutorials remain accessible.';
+    }
+  </script>
+</body>
+</html>

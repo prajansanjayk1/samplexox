@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/QuietoraFocus.Core/QuietoraFocus.Core.csproj" />
+    <Project Path="src/QuietoraFocus.Infrastructure/QuietoraFocus.Infrastructure.csproj" />
+    <Project Path="src/QuietoraFocus/QuietoraFocus.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/QuietoraFocus.IntegrationTests/QuietoraFocus.IntegrationTests.csproj" />
+    <Project Path="tests/QuietoraFocus.UnitTests/QuietoraFocus.UnitTests.csproj" />
+  </Folder>
+</Solution>
