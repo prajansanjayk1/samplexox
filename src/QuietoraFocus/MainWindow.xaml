@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:QuietoraFocus.ViewModels"
         xmlns:models="clr-namespace:QuietoraFocus.Core.Models;assembly=QuietoraFocus.Core"
-        Title="Quietora Focus — Digital Detox &amp; Focus OS (Regain for Windows)" Width="1320" Height="840"
+        Title="quietora. focus — Systems &amp; Human-Interface Studio • Student OS v4.0" Width="1340" Height="860"
         MinWidth="1100" MinHeight="720" WindowStartupLocation="CenterScreen"
         Background="{DynamicResource ThemeWindowBg}" FontFamily="Segoe UI"
         Closing="Window_Closing">
@@ -25,8 +25,8 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <!-- TOP HEADER -->
-    <Border Grid.Row="0" Background="{DynamicResource ThemeSidebarBg}" Padding="20,0">
+    <!-- TOP HEADER (Quietora Labs Design System) -->
+    <Border Grid.Row="0" Background="{DynamicResource ThemeSidebarBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="0,0,0,1" Padding="20,0">
       <Grid VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
@@ -34,41 +34,51 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Brand Logo -->
+        <!-- Brand Logo: Official Quietora Labs Monogram Aperture -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-          <Border Background="#10B981" CornerRadius="8" Width="36" Height="36" Margin="0,0,12,0">
-            <TextBlock Text="Q" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <Border Width="38" Height="38" CornerRadius="12" Background="#161820" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1.5" Margin="0,0,12,0" VerticalAlignment="Center">
+            <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <!-- Outer Aperture Circle -->
+              <Ellipse Width="16" Height="16" Canvas.Left="2" Canvas.Top="2" Stroke="#FFFFFF" StrokeThickness="2.4"/>
+              <!-- Quietora Coral Core Dot -->
+              <Ellipse Width="6" Height="6" Canvas.Left="7" Canvas.Top="7" Fill="{DynamicResource ThemeAccent}"/>
+              <!-- Q Aperture Tail -->
+              <Line X1="13" Y1="13" X2="20" Y2="20" Stroke="#FFFFFF" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+            </Canvas>
           </Border>
-          <StackPanel>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="QUIETORA LABS" FontSize="9" FontWeight="Bold" Foreground="#6EE7B7" Margin="0,0,6,0"/>
-              <Border Background="#065F46" CornerRadius="4" Padding="4,1">
-                <TextBlock Text="REGAIN EDITION" FontSize="8" FontWeight="Bold" Foreground="#A7F3D0"/>
+          <StackPanel VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <TextBlock Text="quietora" FontSize="19" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" VerticalAlignment="Center"/>
+              <TextBlock Text="." FontSize="24" FontWeight="Black" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,-4,2,0"/>
+              <TextBlock Text="focus" FontSize="19" FontWeight="Light" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
+              <!-- Student OS Pill Badge -->
+              <Border Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="10" Padding="8,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                <TextBlock Text="STUDENT OS v4.0" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
               </Border>
             </StackPanel>
-            <TextBlock Text="Quietora Focus" FontSize="17" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Text="Systems &amp; Human-Interface Studio • 100% Offline SQLite" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,1,0,0"/>
           </StackPanel>
         </StackPanel>
 
         <!-- Center Bar: Ambient Soundscape Quick-Controller & Command Palette -->
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <!-- Command Palette Button -->
-          <Button Command="{Binding OpenPaletteCommand}" Background="#1E293B" BorderBrush="#334155" BorderThickness="1"
+          <!-- Command Palette Button (Glassmorphic) -->
+          <Button Command="{Binding OpenPaletteCommand}" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1"
                   Padding="14,6" Margin="0,0,12,0" Cursor="Hand" Style="{StaticResource SecondaryButton}">
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="🔍  Search or command  " Foreground="#94A3B8" FontSize="11"/>
-              <Border Background="#334155" CornerRadius="4" Padding="4,1">
-                <TextBlock Text="Ctrl+K" Foreground="#E2E8F0" FontSize="10" FontWeight="SemiBold"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <TextBlock Text="🔍  Search or command  " Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" VerticalAlignment="Center"/>
+              <Border Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="4" Padding="5,1">
+                <TextBlock Text="Ctrl+K" Foreground="{DynamicResource ThemeTextPrimary}" FontSize="10" FontWeight="SemiBold"/>
               </Border>
             </StackPanel>
           </Button>
 
           <!-- Ambient Sound Quick Selector Pill -->
-          <Border Background="#1E293B" BorderBrush="#334155" BorderThickness="1" CornerRadius="16" Padding="10,4" Margin="0,0,12,0">
+          <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="18" Padding="10,4" Margin="0,0,12,0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-              <TextBlock Text="🎧 Ambient:" Foreground="#94A3B8" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+              <TextBlock Text="🎧 Ambient:" Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
               <ComboBox SelectedValue="{Binding SelectedAmbientSound}" Width="135" Height="24" FontSize="11" Margin="0,0,6,0"
-                        Background="#0F172A" Foreground="{DynamicResource ThemeTextPrimary}">
+                        Background="{DynamicResource ThemeInputBg}" Foreground="{DynamicResource ThemeTextPrimary}">
                 <models:AmbientSoundType>None</models:AmbientSoundType>
                 <models:AmbientSoundType>BrownNoise</models:AmbientSoundType>
                 <models:AmbientSoundType>GentleRain</models:AmbientSoundType>
@@ -81,24 +91,29 @@
             </StackPanel>
           </Border>
 
-          <!-- Active Timer Pill -->
-          <Border Background="#312E81" BorderBrush="#6366F1" BorderThickness="1" CornerRadius="16" Padding="12,5"
+          <!-- Active Timer Pill with Flow State -->
+          <Border Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="18" Padding="14,5"
                   Visibility="{Binding IsSessionActive, Converter={StaticResource BoolToVis}}">
-            <StackPanel Orientation="Horizontal">
-              <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding TimerDisplay}" Foreground="White" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,8,0" VerticalAlignment="Center"/>
+              <TextBlock Text="IN FLOW • " Foreground="{DynamicResource ThemeAccent}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
+              <TextBlock Text="{Binding TimerDisplay}" Foreground="{DynamicResource ThemeTextPrimary}" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
             </StackPanel>
           </Border>
         </StackPanel>
 
-        <!-- Right Header Status Badges -->
+        <!-- Right Header Status Badges & Controls -->
         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-          <Border Background="#064E3B" CornerRadius="12" Padding="10,5" Margin="0,0,10,0">
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="● DETOX SHIELD ON" Foreground="#34D399" FontSize="11" FontWeight="Bold"/>
+          <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="12" Padding="10,5" Margin="0,0,10,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <TextBlock Text="🛡️ FEEDS SUPPRESSED" Foreground="{DynamicResource ThemeAccent}" FontSize="10" FontWeight="Bold"/>
             </StackPanel>
           </Border>
-          <Button Content="Quick Focus" Command="{Binding QuickStartCommand}" Style="{StaticResource PrimaryButton}" Padding="12,6" FontSize="11"
+          <!-- Theme Toggle Button -->
+          <Button Command="{Binding ToggleThemeCommand}" Style="{StaticResource SecondaryButton}" Padding="10,6" Margin="0,0,8,0" ToolTip="Toggle Dark / Warm Paper Theme">
+            <TextBlock Text="🌓" FontSize="13" VerticalAlignment="Center"/>
+          </Button>
+          <Button Content="Quick Focus" Command="{Binding QuickStartCommand}" Style="{StaticResource PrimaryButton}" Padding="14,6" FontSize="11"
                   Visibility="{Binding IsSessionActive, Converter={StaticResource BoolToVis}, ConverterParameter=invert}"/>
         </StackPanel>
       </Grid>
@@ -111,34 +126,38 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <!-- LEFT SIDEBAR -->
-      <Border Grid.Column="0" Background="{DynamicResource ThemeSidebarBg}" BorderBrush="#1E293B" BorderThickness="0,1,1,0" Padding="10,12">
+      <!-- LEFT SIDEBAR (Quietora Labs Editorial Navigation) -->
+      <Border Grid.Column="0" Background="{DynamicResource ThemeSidebarBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="0,0,1,0" Padding="12,14">
         <DockPanel LastChildFill="True">
           <!-- Bottom Brand / Version -->
-          <Border DockPanel.Dock="Bottom" Background="#1E293B" CornerRadius="8" Padding="10,8" Margin="0,8,0,0">
+          <Border DockPanel.Dock="Bottom" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="12,10" Margin="0,10,0,0">
             <StackPanel>
-              <TextBlock Text="Quietora Focus v4.0" FontSize="11" FontWeight="Bold" Foreground="#E2E8F0"/>
-              <TextBlock Text="Student OS &amp; Shield • 100% Offline" FontSize="10" Foreground="#94A3B8"/>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                <TextBlock Text="quietora" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                <TextBlock Text="." FontSize="14" FontWeight="Black" Foreground="{DynamicResource ThemeAccent}" Margin="0,-3,2,0"/>
+                <TextBlock Text="focus" FontSize="11" FontWeight="Light" Foreground="{DynamicResource ThemeTextSecondary}"/>
+              </StackPanel>
+              <TextBlock Text="Student OS • 100% Offline SQLite" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
             </StackPanel>
           </Border>
 
           <!-- Navigation Links -->
           <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
-              <!-- Student OS & Focus Section -->
-              <TextBlock Text="STUDENT OS &amp; SHIELDS" FontSize="10" FontWeight="Bold" Foreground="#6EE7B7" Margin="14,6,0,4"/>
-              <Button Content="🏠   Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Style="{StaticResource NavButton}"/>
+              <!-- Focus & Shields Section -->
+              <TextBlock Text="FOCUS &amp; SHIELDS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="12,4,0,6"/>
               <Button Content="⏱️   Focus Studio" Command="{Binding NavigateCommand}" CommandParameter="Focus" Style="{StaticResource NavButton}"/>
+              <Button Content="🏠   Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Style="{StaticResource NavButton}"/>
               <Button Content="🎮   Game Shield" Command="{Binding NavigateCommand}" CommandParameter="GameShield" Style="{StaticResource NavButton}"/>
               <Button Content="🛡️   Safe Browsing &amp; DNS" Command="{Binding NavigateCommand}" CommandParameter="SafeBrowsing" Style="{StaticResource NavButton}"/>
               <Button Content="🚫   Shorts &amp; Reels Shield" Command="{Binding NavigateCommand}" CommandParameter="Shorts" Style="{StaticResource NavButton}"/>
               <Button Content="🧘   Screen Time &amp; Budgets" Command="{Binding NavigateCommand}" CommandParameter="Detox" Style="{StaticResource NavButton}"/>
               <Button Content="👥   Quietora Together" Command="{Binding NavigateCommand}" CommandParameter="Together" Style="{StaticResource NavButton}"/>
 
-              <Separator Background="#1E293B" Margin="6,6"/>
+              <Separator Background="{DynamicResource ThemeCardBorder}" Margin="6,8"/>
 
               <!-- Academic Workspace -->
-              <TextBlock Text="ACADEMIC WORKSPACE" FontSize="10" FontWeight="Bold" Foreground="#A5B4FC" Margin="14,6,0,4"/>
+              <TextBlock Text="ACADEMIC WORKSPACE" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="12,4,0,6"/>
               <Button Content="📚   Syllabus &amp; Subjects" Command="{Binding NavigateCommand}" CommandParameter="Planner" Style="{StaticResource NavButton}"/>
               <Button Content="📝   Assignments" Command="{Binding NavigateCommand}" CommandParameter="Assignments" Style="{StaticResource NavButton}"/>
               <Button Content="🎯   Exams &amp; Flashcards" Command="{Binding NavigateCommand}" CommandParameter="Exams" Style="{StaticResource NavButton}"/>
@@ -146,10 +165,10 @@
               <Button Content="✅   Tasks &amp; Goals" Command="{Binding NavigateCommand}" CommandParameter="Tasks" Style="{StaticResource NavButton}"/>
               <Button Content="💼   Resume Workspace" Command="{Binding NavigateCommand}" CommandParameter="Workspace" Style="{StaticResource NavButton}"/>
 
-              <Separator Background="#1E293B" Margin="6,6"/>
+              <Separator Background="{DynamicResource ThemeCardBorder}" Margin="6,8"/>
 
               <!-- Intelligence & Tools -->
-              <TextBlock Text="ANALYTICS &amp; SYSTEM" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="14,6,0,4"/>
+              <TextBlock Text="SYSTEM &amp; ANALYTICS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="12,4,0,6"/>
               <Button Content="📊   Productivity Analytics" Command="{Binding NavigateCommand}" CommandParameter="Analytics" Style="{StaticResource NavButton}"/>
               <Button Content="🤖   AI Workspace Assistant" Command="{Binding NavigateCommand}" CommandParameter="AIAssistant" Style="{StaticResource NavButton}"/>
               <Button Content="📁   PC Memory Search" Command="{Binding NavigateCommand}" CommandParameter="Memory" Style="{StaticResource NavButton}"/>
@@ -444,10 +463,25 @@
             </Border>
           </StackPanel>
 
-          <!-- 4. FOCUS STUDIO PAGE -->
+          <!-- 4. FOCUS STUDIO PAGE (Quietora Interactive Attention Engine) -->
           <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Focus}">
-            <TextBlock Text="Focus Studio" Style="{StaticResource PageTitle}"/>
-            <TextBlock Text="Multi-mode focus engine with ambient audio soundscapes and strict distraction interception." Style="{StaticResource PageSubtitle}"/>
+            <TextBlock Text="SYSTEMS &amp; HUMAN-INTERFACE STUDIO" Style="{StaticResource EyebrowText}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+              <TextBlock Text="Your screen. Your time. " FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+              <TextBlock Text="Your call." FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" FontStyle="Italic"/>
+            </StackPanel>
+            <TextBlock Text="A calmer way to study and work on your PC. Designed to help you begin without friction, stay with the task and finish feeling like your attention was well spent." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Interactive Mode Pill Segmented Selector (from Quietora Website Demo) -->
+            <Border Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="24" Padding="6,5" Margin="0,0,0,20" HorizontalAlignment="Left">
+              <StackPanel Orientation="Horizontal">
+                <Button Content="25 min Focus" Command="{Binding SetTimerPresetCommand}" CommandParameter="25" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                <Button Content="45 min Deep Work" Command="{Binding SetTimerPresetCommand}" CommandParameter="45" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                <Button Content="50 min Block" Command="{Binding SetTimerPresetCommand}" CommandParameter="50" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                <Button Content="5 min Break" Command="{Binding SetTimerPresetCommand}" CommandParameter="5" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                <Button Content="15 min Reset" Command="{Binding SetTimerPresetCommand}" CommandParameter="15" Style="{StaticResource SegmentedPillButton}"/>
+              </StackPanel>
+            </Border>
 
             <Grid>
               <Grid.ColumnDefinitions>
@@ -456,26 +490,61 @@
                 <ColumnDefinition Width="*"/>
               </Grid.ColumnDefinitions>
 
-              <!-- Main Clock & Controls -->
+              <!-- Left Column: Flagship Timer Card & Controls -->
               <Border Grid.Column="0" Style="{StaticResource CardBorder}">
                 <StackPanel>
-                  <!-- Mode Selector -->
-                  <TextBlock Text="Focus Technique" Style="{StaticResource SectionTitle}"/>
-                  <WrapPanel Margin="0,0,0,16">
-                    <RadioButton Content="Deep Focus (50m)" IsChecked="True" GroupName="ModeGroup" Margin="0,0,14,8"/>
-                    <RadioButton Content="Pomodoro (25m / 5m)" GroupName="ModeGroup" Margin="0,0,14,8"/>
-                    <RadioButton Content="Study Mode (Subject)" GroupName="ModeGroup" Margin="0,0,14,8"/>
-                    <RadioButton Content="Work Mode (Project)" GroupName="ModeGroup" Margin="0,0,14,8"/>
-                  </WrapPanel>
+                  <!-- Card Header Bar -->
+                  <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                      <TextBlock Text="quietora" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                      <TextBlock Text="." FontSize="18" FontWeight="Black" Foreground="{DynamicResource ThemeAccent}" Margin="0,-3,2,0"/>
+                      <TextBlock Text="focus" FontSize="14" FontWeight="Light" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="12" Padding="10,3">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Fill="{DynamicResource ThemeAccent}" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding TimerSubText}" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                      </StackPanel>
+                    </Border>
+                  </Grid>
 
-                  <!-- Big Clock Display -->
-                  <Border Background="{DynamicResource ThemeHoverBg}" CornerRadius="16" Padding="20" Margin="0,0,0,16">
+                  <!-- Hero Clock Display with Glow -->
+                  <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="20" Padding="28,24" Margin="0,0,0,18">
                     <StackPanel HorizontalAlignment="Center">
-                      <TextBlock Text="{Binding TimerDisplay}" FontSize="74" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
-                      <TextBlock Text="{Binding TimerSubText}" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" HorizontalAlignment="Center" Margin="0,4,0,12"/>
-                      <ProgressBar Value="{Binding TimerProgress, Mode=OneWay}" Height="8" Width="360" Minimum="0" Maximum="100" Foreground="{DynamicResource ThemeAccent}" Background="#E2E8F0"/>
+                      <!-- Big Tabular Display -->
+                      <TextBlock Text="{Binding TimerDisplay}" FontSize="82" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
+                      <TextBlock Text="Deep work, one step at a time." FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" Margin="0,2,0,16"/>
+
+                      <!-- Coral Gradient Progress Bar -->
+                      <Border Width="380" Height="8" CornerRadius="4" Background="{DynamicResource ThemeInputBorder}" ClipToBounds="True">
+                        <ProgressBar Value="{Binding TimerProgress, Mode=OneWay}" Height="8" Width="380" Minimum="0" Maximum="100" Foreground="{DynamicResource ThemeAccent}" BorderThickness="0" Background="Transparent"/>
+                      </Border>
                     </StackPanel>
                   </Border>
+
+                  <!-- Secondary Status Chips (from Quietora Website) -->
+                  <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="10,6" HorizontalAlignment="Left">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="🎧 Ambient: " FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                        <TextBlock Text="{Binding SelectedAmbientSound}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
+                      </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="10,6">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="🔥 " FontSize="11"/>
+                        <TextBlock Text="{Binding Metrics.TodayFocusMinutes, StringFormat='{}{0}m focused today'}" FontSize="11" FontWeight="Bold" Foreground="#F59E0B"/>
+                      </StackPanel>
+                    </Border>
+                  </Grid>
 
                   <!-- Inputs -->
                   <Grid Margin="0,0,0,12">
@@ -494,9 +563,9 @@
                     </StackPanel>
                   </Grid>
 
-                  <Grid Margin="0,0,0,16">
+                  <Grid Margin="0,0,0,18">
                     <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="120"/>
+                      <ColumnDefinition Width="110"/>
                       <ColumnDefinition Width="10"/>
                       <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
@@ -510,16 +579,51 @@
                     </StackPanel>
                   </Grid>
 
-                  <!-- Buttons -->
-                  <WrapPanel Margin="0,0,0,12">
-                    <Button Content="Start Focus Session" Command="{Binding StartSessionCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,8"/>
-                    <Button Content="Pause" Command="{Binding PauseSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
-                    <Button Content="Resume" Command="{Binding ResumeSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
-                    <Button Content="End Session" Command="{Binding StopSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
-                    <Button Content="Emergency Stop" Command="{Binding EmergencyStopCommand}" Style="{StaticResource DangerButton}" Margin="0,0,0,8"/>
+                  <!-- Action Buttons -->
+                  <WrapPanel Margin="0,0,0,14">
+                    <Button Content="Start session ➔" Command="{Binding StartSessionCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,10,8" Padding="22,11"/>
+                    <Button Content="Pause ⏸" Command="{Binding PauseSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="Resume ▶" Command="{Binding ResumeSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="Reset ↺" Command="{Binding ResetTimerCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="End Session ⏹" Command="{Binding StopSessionCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,8"/>
+                    <Button Content="Emergency Stop 🚨" Command="{Binding EmergencyStopCommand}" Style="{StaticResource DangerButton}" Margin="0,0,0,8"/>
                   </WrapPanel>
 
-                  <TextBlock Text="{Binding StatusMessage}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap"/>
+                  <!-- 3 Step Boxes (from Quietora Website: 01/Set, 02/Protect, 03/Reflect) -->
+                  <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="8"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="8"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="12,10">
+                      <StackPanel>
+                        <TextBlock Text="01 / SET" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,3"/>
+                        <TextBlock Text="Pick a priority" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                        <TextBlock Text="Decide what truly deserves your attention." FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                      </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="12,10">
+                      <StackPanel>
+                        <TextBlock Text="02 / PROTECT" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,3"/>
+                        <TextBlock Text="Make room to work" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                        <TextBlock Text="Silence tempting detours and background feeds." FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                      </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="4" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="12,10">
+                      <StackPanel>
+                        <TextBlock Text="03 / REFLECT" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,3"/>
+                        <TextBlock Text="Build lasting rhythm" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                        <TextBlock Text="Notice your focus intervals and consistency." FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                      </StackPanel>
+                    </Border>
+                  </Grid>
+
                 </StackPanel>
               </Border>
 
@@ -606,13 +710,37 @@
             </Grid>
           </StackPanel>
 
-          <!-- 5. OVERVIEW DASHBOARD PAGE -->
+          <!-- 5. OVERVIEW DASHBOARD PAGE (Quietora Attention Overview) -->
           <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Dashboard}">
-            <TextBlock Text="Productivity Dashboard" Style="{StaticResource PageTitle}"/>
-            <TextBlock Text="Summary of active focus time, daily streak, and tasks." Style="{StaticResource PageSubtitle}"/>
+            <TextBlock Text="SYSTEMS &amp; ATTENTION PULSE" Style="{StaticResource EyebrowText}"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+              <TextBlock Text="Software engineered for " FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+              <TextBlock Text="deep attention." FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" FontStyle="Italic"/>
+            </StackPanel>
+            <TextBlock Text="Built locally, engineered with intention, and designed to respect human cognition." Style="{StaticResource PageSubtitle}"/>
 
+            <!-- System Integrity Strip (from Quietora Website) -->
+            <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="12" Padding="14,10" Margin="0,0,0,18">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                  <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                  <TextBlock Text="System Shield Active: Background feeds suppressed • Manifest V3 DNR • 100% On-Device SQLite" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                </StackPanel>
+                <Border Grid.Column="1" Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="6" Padding="8,2">
+                  <TextBlock Text="Zero Telemetry Guarantee" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
+                </Border>
+              </Grid>
+            </Border>
+
+            <!-- Hero Metric Cards Grid -->
             <Grid Margin="0,0,0,20">
               <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="14"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="14"/>
                 <ColumnDefinition Width="*"/>
@@ -622,25 +750,37 @@
 
               <Border Grid.Column="0" Style="{StaticResource CardBorder}">
                 <StackPanel>
+                  <TextBlock Text="01 / ATTENTION" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="TODAY'S FOCUS" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
                   <TextBlock Text="{Binding Metrics.TodayFocusMinutes, StringFormat='{}{0} mins'}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4,0,2"/>
-                  <TextBlock Text="Active concentration" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="Active concentration" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
 
               <Border Grid.Column="2" Style="{StaticResource CardBorder}">
                 <StackPanel>
+                  <TextBlock Text="02 / RHYTHM" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="DAILY STREAK" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
                   <TextBlock Text="{Binding Metrics.CurrentStreakDays, StringFormat='{}{0} days'}" FontSize="26" FontWeight="Bold" Foreground="#F59E0B" Margin="0,4,0,2"/>
-                  <TextBlock Text="{Binding Metrics.BestStreakDays, StringFormat='Best: {0} days'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding Metrics.BestStreakDays, StringFormat='Best: {0} days'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
 
               <Border Grid.Column="4" Style="{StaticResource CardBorder}">
                 <StackPanel>
+                  <TextBlock Text="03 / EXECUTION" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="COMPLETED TASKS" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
                   <TextBlock Text="{Binding Metrics.CompletedTasksCount}" FontSize="26" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,2"/>
-                  <TextBlock Text="{Binding Metrics.PendingTasksCount, StringFormat='{}{0} pending'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding Metrics.PendingTasksCount, StringFormat='{}{0} pending'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                </StackPanel>
+              </Border>
+
+              <Border Grid.Column="6" Style="{StaticResource CardBorder}">
+                <StackPanel>
+                  <TextBlock Text="04 / SHIELD" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
+                  <TextBlock Text="DISTRACTIONS AVERTED" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="{Binding DoomscrollsAvertedCount, StringFormat='{}{0} saved'}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,4,0,2"/>
+                  <TextBlock Text="DNR &amp; Game intercepts" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
             </Grid>
@@ -1590,22 +1730,25 @@
       </ScrollViewer>
     </Grid>
 
-    <!-- BOTTOM STATUS / NOTIFICATION BAR -->
-    <Border Grid.Row="2" Background="{DynamicResource ThemeSidebarBg}" Padding="16,6">
+    <!-- BOTTOM STATUS / NOTIFICATION BAR (Quietora Labs Bottom Bar) -->
+    <Border Grid.Row="2" Background="{DynamicResource ThemeSidebarBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="0,1,0,0" Padding="20,8">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding StatusMessage}" FontSize="11" Foreground="#94A3B8" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <Ellipse Width="6" Height="6" Fill="{DynamicResource ThemeAccent}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding StatusMessage}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
+        </StackPanel>
 
         <!-- In-app dismissible notification banner -->
-        <Border Grid.Column="1" Background="#065F46" BorderBrush="#10B981" BorderThickness="1" CornerRadius="6" Padding="10,3"
+        <Border Grid.Column="1" Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="8" Padding="12,4"
                 Visibility="{Binding IsNotificationVisible, Converter={StaticResource BoolToVis}}">
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding NotificationBannerText}" FontSize="11" Foreground="White" VerticalAlignment="Center" Margin="0,0,8,0"/>
-            <Button Content="✕" Command="{Binding DismissNotificationCommand}" Style="{StaticResource SecondaryButton}" Padding="4,1" FontSize="9"/>
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBlock Text="{Binding NotificationBannerText}" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <Button Content="✕" Command="{Binding DismissNotificationCommand}" Style="{StaticResource SecondaryButton}" Padding="6,2" FontSize="10"/>
           </StackPanel>
         </Border>
       </Grid>

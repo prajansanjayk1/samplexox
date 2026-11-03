@@ -4,18 +4,20 @@
              xmlns:conv="clr-namespace:QuietoraFocus.Converters"
              Startup="Application_Startup">
   <Application.Resources>
-    <!-- Dynamic Theme Brushes (Default Light Mode, updated via ThemeManager) -->
-    <SolidColorBrush x:Key="ThemeWindowBg" Color="#F8FAFC"/>
-    <SolidColorBrush x:Key="ThemeSidebarBg" Color="#111D34"/>
-    <SolidColorBrush x:Key="ThemeCardBg" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="ThemeCardBorder" Color="#E2E8F0"/>
-    <SolidColorBrush x:Key="ThemeTextPrimary" Color="#0F172A"/>
-    <SolidColorBrush x:Key="ThemeTextSecondary" Color="#64748B"/>
-    <SolidColorBrush x:Key="ThemeInputBg" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="ThemeInputBorder" Color="#D7DEEA"/>
-    <SolidColorBrush x:Key="ThemeAccent" Color="#4F46E5"/>
-    <SolidColorBrush x:Key="ThemeAccentSubtle" Color="#EEF2FF"/>
-    <SolidColorBrush x:Key="ThemeHoverBg" Color="#F1F5F9"/>
+    <!-- Dynamic Theme Brushes (Default: Quietora Labs Obsidian & Coral Flagship) -->
+    <SolidColorBrush x:Key="ThemeWindowBg" Color="#0E1015"/>
+    <SolidColorBrush x:Key="ThemeSidebarBg" Color="#12141A"/>
+    <SolidColorBrush x:Key="ThemeCardBg" Color="#181A22"/>
+    <SolidColorBrush x:Key="ThemeCardBorder" Color="#272B36"/>
+    <SolidColorBrush x:Key="ThemeTextPrimary" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="ThemeTextSecondary" Color="#9FA2AA"/>
+    <SolidColorBrush x:Key="ThemeInputBg" Color="#12141A"/>
+    <SolidColorBrush x:Key="ThemeInputBorder" Color="#2D313C"/>
+    <SolidColorBrush x:Key="ThemeAccent" Color="#E55337"/>
+    <SolidColorBrush x:Key="ThemeAccentHover" Color="#F06548"/>
+    <SolidColorBrush x:Key="ThemeAccentSubtle" Color="#2A1815"/>
+    <SolidColorBrush x:Key="ThemeHoverBg" Color="#22252E"/>
+    <SolidColorBrush x:Key="ThemeLine" Color="#272B36"/>
 
     <SolidColorBrush x:Key="ColorSuccess" Color="#10B981"/>
     <SolidColorBrush x:Key="ColorWarning" Color="#F59E0B"/>
@@ -27,33 +29,41 @@
     <conv:InverseBoolConverter x:Key="InverseBool"/>
     <conv:PriorityToColorConverter x:Key="PriorityColor"/>
 
-    <!-- Typography -->
+    <!-- Typography: Quietora Labs Editorial Hierarchy -->
+    <Style x:Key="EyebrowText" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="10"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="{DynamicResource ThemeAccent}"/>
+      <Setter Property="Margin" Value="0,0,0,5"/>
+    </Style>
+
     <Style x:Key="PageTitle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="24"/>
       <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}"/>
+      <Setter Property="Margin" Value="0,0,0,2"/>
     </Style>
 
     <Style x:Key="PageSubtitle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
-      <Setter Property="Margin" Value="0,3,0,16"/>
+      <Setter Property="Margin" Value="0,2,0,18"/>
     </Style>
 
     <Style x:Key="SectionTitle" TargetType="TextBlock">
-      <Setter Property="FontSize" Value="16"/>
-      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="15"/>
+      <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}"/>
-      <Setter Property="Margin" Value="0,0,0,10"/>
+      <Setter Property="Margin" Value="0,0,0,8"/>
     </Style>
 
-    <!-- Card Container -->
+    <!-- Card Container (Quietora Elevation & Crisp Border) -->
     <Style x:Key="CardBorder" TargetType="Border">
       <Setter Property="Background" Value="{DynamicResource ThemeCardBg}"/>
       <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorder}"/>
       <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="14"/>
-      <Setter Property="Padding" Value="20"/>
+      <Setter Property="CornerRadius" Value="16"/>
+      <Setter Property="Padding" Value="22"/>
     </Style>
 
     <!-- Buttons -->
@@ -73,10 +83,10 @@
             </Border>
             <ControlTemplate.Triggers>
               <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
+                <Setter TargetName="border" Property="Background" Value="{DynamicResource ThemeAccentHover}"/>
               </Trigger>
               <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="border" Property="Opacity" Value="0.4"/>
+                <Setter TargetName="border" Property="Opacity" Value="0.45"/>
               </Trigger>
             </ControlTemplate.Triggers>
           </ControlTemplate>
@@ -87,6 +97,48 @@
     <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
       <Setter Property="Background" Value="{DynamicResource ThemeHoverBg}"/>
       <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="{TemplateBinding Padding}">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="{DynamicResource ThemeCardBorder}"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="border" Property="Opacity" Value="0.4"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="SegmentedPillButton" TargetType="Button">
+      <Setter Property="Background" Value="{DynamicResource ThemeHoverBg}"/>
+      <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="14,8"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="20" Padding="{TemplateBinding Padding}">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeAccent}"/>
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
 
     <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
@@ -95,12 +147,12 @@
     </Style>
 
     <Style x:Key="NavButton" TargetType="Button">
-      <Setter Property="Foreground" Value="#94A3B8"/>
+      <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontSize" Value="12.5"/>
       <Setter Property="FontWeight" Value="Medium"/>
       <Setter Property="HorizontalContentAlignment" Value="Left"/>
-      <Setter Property="Padding" Value="14,10"/>
+      <Setter Property="Padding" Value="12,9"/>
       <Setter Property="Margin" Value="0,2"/>
       <Setter Property="Cursor" Value="Hand"/>
       <Setter Property="BorderThickness" Value="0"/>
@@ -112,8 +164,8 @@
             </Border>
             <ControlTemplate.Triggers>
               <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="border" Property="Background" Value="#1E293B"/>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter TargetName="border" Property="Background" Value="{DynamicResource ThemeHoverBg}"/>
+                <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}"/>
               </Trigger>
             </ControlTemplate.Triggers>
           </ControlTemplate>
@@ -128,7 +180,7 @@
       <Setter Property="Background" Value="{DynamicResource ThemeInputBg}"/>
       <Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorder}"/>
       <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="Padding" Value="10,8"/>
+      <Setter Property="Padding" Value="12,9"/>
       <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
   </Application.Resources>

@@ -15,31 +15,47 @@ public static class ThemeManager
 
         if (isDark)
         {
-            SetBrush(app, "ThemeWindowBg", Color.FromRgb(15, 23, 42));       // #0F172A
-            SetBrush(app, "ThemeSidebarBg", Color.FromRgb(17, 24, 39));      // #111827
-            SetBrush(app, "ThemeCardBg", Color.FromRgb(30, 41, 59));         // #1E293B
-            SetBrush(app, "ThemeCardBorder", Color.FromRgb(51, 65, 85));     // #334155
-            SetBrush(app, "ThemeTextPrimary", Color.FromRgb(248, 250, 252)); // #F8FAFC
-            SetBrush(app, "ThemeTextSecondary", Color.FromRgb(148, 163, 184));// #94A3B8
-            SetBrush(app, "ThemeInputBg", Color.FromRgb(15, 23, 42));        // #0F172A
-            SetBrush(app, "ThemeInputBorder", Color.FromRgb(71, 85, 105));   // #475569
-            SetBrush(app, "ThemeAccent", Color.FromRgb(99, 102, 241));       // #6366F1
-            SetBrush(app, "ThemeAccentSubtle", Color.FromRgb(49, 46, 129));  // #312E81
-            SetBrush(app, "ThemeHoverBg", Color.FromRgb(51, 65, 85));        // #334155
+            // Quietora Labs Flagship Obsidian & Coral Palette
+            SetBrush(app, "ThemeWindowBg", Color.FromRgb(14, 16, 21));          // #0E1015 (Deep Obsidian Canvas)
+            SetBrush(app, "ThemeSidebarBg", Color.FromRgb(18, 20, 26));         // #12141A (Obsidian Sidebar)
+            SetBrush(app, "ThemeCardBg", Color.FromRgb(24, 26, 34));            // #181A22 (Tactile Obsidian Card)
+            SetBrush(app, "ThemeCardBorder", Color.FromRgb(39, 43, 54));        // #272B36 (Crisp Line)
+            SetBrush(app, "ThemeTextPrimary", Color.FromRgb(248, 250, 252));    // #F8FAFC (Clean High-Contrast Text)
+            SetBrush(app, "ThemeTextSecondary", Color.FromRgb(159, 162, 170));  // #9FA2AA (Subtle Muted)
+            SetBrush(app, "ThemeInputBg", Color.FromRgb(18, 20, 26));           // #12141A
+            SetBrush(app, "ThemeInputBorder", Color.FromRgb(45, 49, 60));       // #2D313C
+            SetBrush(app, "ThemeAccent", Color.FromRgb(229, 83, 55));           // #E55337 (Quietora Signature Terracotta Coral!)
+            SetBrush(app, "ThemeAccentHover", Color.FromRgb(240, 101, 72));     // #F06548
+            SetBrush(app, "ThemeAccentSubtle", Color.FromRgb(42, 24, 21));      // #2A1815 (Coral soft glow tint)
+            SetBrush(app, "ThemeHoverBg", Color.FromRgb(34, 37, 46));           // #22252E (Elevated Hover)
+            SetBrush(app, "ThemeLine", Color.FromRgb(39, 43, 54));              // #272B36
+            SetBrush(app, "ThemeMint", Color.FromRgb(16, 185, 129));            // #10B981 (Mint/Success)
+            SetBrush(app, "ThemeMintBg", Color.FromRgb(16, 45, 34));            // #102D22
+            SetBrush(app, "ThemeMintBorder", Color.FromRgb(5, 150, 105));       // #059669
+            SetBrush(app, "ThemeNavActiveBg", Color.FromRgb(39, 23, 20));       // #271714 (Coral tinted active nav pill)
+            SetBrush(app, "ThemeNavActiveBorder", Color.FromRgb(229, 83, 55));   // #E55337
         }
         else
         {
-            SetBrush(app, "ThemeWindowBg", Color.FromRgb(248, 250, 252));    // #F8FAFC
-            SetBrush(app, "ThemeSidebarBg", Color.FromRgb(17, 29, 52));      // #111D34 (Night brand)
-            SetBrush(app, "ThemeCardBg", Color.FromRgb(255, 255, 255));      // #FFFFFF
-            SetBrush(app, "ThemeCardBorder", Color.FromRgb(226, 232, 240));  // #E2E8F0
-            SetBrush(app, "ThemeTextPrimary", Color.FromRgb(15, 23, 42));    // #0F172A
-            SetBrush(app, "ThemeTextSecondary", Color.FromRgb(100, 116, 139));// #64748B
-            SetBrush(app, "ThemeInputBg", Color.FromRgb(255, 255, 255));     // #FFFFFF
-            SetBrush(app, "ThemeInputBorder", Color.FromRgb(215, 222, 234)); // #D7DEEA
-            SetBrush(app, "ThemeAccent", Color.FromRgb(79, 70, 229));        // #4F46E5
-            SetBrush(app, "ThemeAccentSubtle", Color.FromRgb(238, 242, 255));// #EEF2FF
-            SetBrush(app, "ThemeHoverBg", Color.FromRgb(241, 245, 249));     // #F1F5F9
+            // Quietora Labs Warm Editorial Paper Palette
+            SetBrush(app, "ThemeWindowBg", Color.FromRgb(248, 246, 240));       // #F8F6F0 (Warm Editorial Paper)
+            SetBrush(app, "ThemeSidebarBg", Color.FromRgb(241, 237, 227));      // #F1EDE3 (Paper Subtle)
+            SetBrush(app, "ThemeCardBg", Color.FromRgb(255, 255, 255));         // #FFFFFF (Paper Card)
+            SetBrush(app, "ThemeCardBorder", Color.FromRgb(222, 216, 203));     // #DED8CB (Editorial Line)
+            SetBrush(app, "ThemeTextPrimary", Color.FromRgb(18, 19, 23));       // #121317 (Deep Obsidian Ink)
+            SetBrush(app, "ThemeTextSecondary", Color.FromRgb(94, 96, 102));    // #5E6066 (Editorial Muted)
+            SetBrush(app, "ThemeInputBg", Color.FromRgb(255, 255, 255));        // #FFFFFF
+            SetBrush(app, "ThemeInputBorder", Color.FromRgb(222, 216, 203));    // #DED8CB
+            SetBrush(app, "ThemeAccent", Color.FromRgb(229, 83, 55));           // #E55337 (Quietora Signature Terracotta Coral!)
+            SetBrush(app, "ThemeAccentHover", Color.FromRgb(204, 67, 41));      // #CC4329
+            SetBrush(app, "ThemeAccentSubtle", Color.FromRgb(253, 238, 235));   // #FDEEEB
+            SetBrush(app, "ThemeHoverBg", Color.FromRgb(234, 229, 218));        // #EAE5DA
+            SetBrush(app, "ThemeLine", Color.FromRgb(222, 216, 203));
+            SetBrush(app, "ThemeMint", Color.FromRgb(36, 87, 68));              // #245744
+            SetBrush(app, "ThemeMintBg", Color.FromRgb(230, 243, 235));         // #E6F3EB
+            SetBrush(app, "ThemeMintBorder", Color.FromRgb(191, 225, 206));     // #BFE1CE
+            SetBrush(app, "ThemeNavActiveBg", Color.FromRgb(253, 238, 235));
+            SetBrush(app, "ThemeNavActiveBorder", Color.FromRgb(229, 83, 55));
         }
     }
 

@@ -43,8 +43,8 @@ public sealed class MainViewModel : ObservableObject
     private readonly SoundService _soundService;
     private readonly DispatcherTimer _tickTimer;
 
-    private string _activePage = "Detox"; // Default landing: Regain Digital Detox Dashboard
-    private string _statusMessage = "Quietora Focus: Digital Detox & Focus OS ready.";
+    private string _activePage = "Focus"; // Default landing: Quietora Focus Studio
+    private string _statusMessage = "quietora. focus: Ready for deep attention.";
     private string _notificationBannerText = "";
     private bool _isNotificationVisible;
     private DateTimeOffset _lastInterventionTime = DateTimeOffset.MinValue;
@@ -217,6 +217,9 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand StopSessionCommand { get; }
     public RelayCommand EmergencyStopCommand { get; }
     public RelayCommand QuickStartCommand { get; }
+    public RelayCommand SetTimerPresetCommand { get; }
+    public RelayCommand ResetTimerCommand { get; }
+    public RelayCommand ToggleThemeCommand { get; }
     public RelayCommand DismissNotificationCommand { get; }
 
     public RelayCommand AddBlockedAppCommand { get; }
@@ -342,6 +345,9 @@ public sealed class MainViewModel : ObservableObject
         StopSessionCommand = new RelayCommand(ExecuteStopSession, () => IsSessionActive);
         EmergencyStopCommand = new RelayCommand(ExecuteEmergencyStop, () => IsSessionActive);
         QuickStartCommand = new RelayCommand(ExecuteQuickStart, () => !IsSessionActive);
+        SetTimerPresetCommand = new RelayCommand(p => ExecuteSetTimerPreset(p));
+        ResetTimerCommand = new RelayCommand(ExecuteResetTimer);
+        ToggleThemeCommand = new RelayCommand(() => IsDarkMode = !IsDarkMode);
         DismissNotificationCommand = new RelayCommand(() => IsNotificationVisible = false);
 
         // Distractions
@@ -436,7 +442,7 @@ public sealed class MainViewModel : ObservableObject
         ExplainConceptCommand = new RelayCommand(ExecuteExplainConcept);
 
         // Load settings
-        _isDarkMode = _settingsRepo.GetBool("dark_mode", false);
+        _isDarkMode = _settingsRepo.GetBool("dark_mode", true);
         _isLaunchAtStartup = StartupManager.IsLaunchAtStartupEnabled();
         _soundAlertsEnabled = _settingsRepo.GetBool("sound_alerts", true);
         _isHostsBlockingEnabled = _settingsRepo.GetBool("hosts_blocking", false);
@@ -1475,6 +1481,65 @@ public sealed class MainViewModel : ObservableObject
         SessionMinutesInput = 25;
         CurrentTaskInput = "Quick Deep Focus";
         ExecuteStartSession();
+    }
+
+    private void ExecuteSetTimerPreset(object? param)
+    {
+        if (param == null) return;
+        int minutes = 25;
+        if (param is int m) minutes = m;
+        else if (int.TryParse(param.ToString(), out var parsed)) minutes = parsed;
+
+        if (minutes == 25)
+        {
+            SelectedSessionMode = SessionMode.Pomodoro;
+            SessionMinutesInput = 25;
+            CurrentTaskInput = "Focused Pomodoro Cycle";
+        }
+        else if (minutes == 45)
+        {
+            SelectedSessionMode = SessionMode.DeepFocus;
+            SessionMinutesInput = 45;
+            CurrentTaskInput = "Deep Work Block";
+        }
+        else if (minutes == 50)
+        {
+            SelectedSessionMode = SessionMode.DeepFocus;
+            SessionMinutesInput = 50;
+            CurrentTaskInput = "50-Minute Intense Block";
+        }
+        else if (minutes == 5)
+        {
+            SelectedSessionMode = SessionMode.StudyMode;
+            SessionMinutesInput = 5;
+            CurrentTaskInput = "5-Minute Rest & Breathe";
+        }
+        else if (minutes == 15)
+        {
+            SelectedSessionMode = SessionMode.StudyMode;
+            SessionMinutesInput = 15;
+            CurrentTaskInput = "15-Minute Cognitive Reset";
+        }
+        else
+        {
+            SessionMinutesInput = minutes;
+        }
+
+        if (!IsSessionActive)
+        {
+            UpdateIdleTimerDisplay();
+        }
+        ShowNotification($"Focus preset set to {minutes}m ({CurrentTaskInput}).");
+    }
+
+    private void ExecuteResetTimer()
+    {
+        if (IsSessionActive)
+        {
+            ExecuteStopSession();
+        }
+        UpdateIdleTimerDisplay();
+        ShowNotification("Timer reset to initial state.");
     }
 
     private void EndSessionInternal(string reason)

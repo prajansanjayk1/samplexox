@@ -22,7 +22,7 @@ public partial class App : Application
         {
             var db = new QuietoraDatabase();
             var settings = new SettingsRepository(db);
-            var isDark = settings.GetBool("dark_mode", false);
+            var isDark = settings.GetBool("dark_mode", true);
             ThemeManager.ApplyTheme(isDark);
         }
         catch (Exception ex)
