@@ -12,6 +12,7 @@ public sealed class ExtensionPolicyDto
     public string SessionMode { get; set; } = "Deep Focus";
     public bool IsAdultShieldActive { get; set; } = true;
     public bool BlockShortsOnly { get; set; }
+    public bool YouTubeStudyMode { get; set; } = true;
     public List<string> BlockedWebsites { get; set; } = new();
     public List<string> AllowlistedDomains { get; set; } = new();
     public int PolicyVersion { get; set; } = 4;

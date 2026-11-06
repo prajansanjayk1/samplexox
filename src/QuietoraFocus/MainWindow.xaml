@@ -51,12 +51,12 @@
               <TextBlock Text="quietora" FontSize="19" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" VerticalAlignment="Center"/>
               <TextBlock Text="." FontSize="24" FontWeight="Black" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center" Margin="0,-4,2,0"/>
               <TextBlock Text="focus" FontSize="19" FontWeight="Light" Foreground="{DynamicResource ThemeTextSecondary}" VerticalAlignment="Center"/>
-              <!-- Student OS Pill Badge -->
+              <!-- Regain Motto Badge -->
               <Border Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="10" Padding="8,2" Margin="10,0,0,0" VerticalAlignment="Center">
-                <TextBlock Text="STUDENT OS v4.0" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
+                <TextBlock Text="STUDY MORE, SCROLL LESS" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
               </Border>
             </StackPanel>
-            <TextBlock Text="Systems &amp; Human-Interface Studio • 100% Offline SQLite" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,1,0,0"/>
+            <TextBlock Text="Quietora Focus (Regain Edition) • The Windows Focus Timer &amp; Digital Detox • 100% Private" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,1,0,0"/>
           </StackPanel>
         </StackPanel>
 
@@ -64,7 +64,7 @@
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
           <!-- Command Palette Button (Glassmorphic) -->
           <Button Command="{Binding OpenPaletteCommand}" Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1"
-                  Padding="14,6" Margin="0,0,12,0" Cursor="Hand" Style="{StaticResource SecondaryButton}">
+                  Padding="14,6" Margin="0,0,10,0" Cursor="Hand" Style="{StaticResource SecondaryButton}">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
               <TextBlock Text="🔍  Search or command  " Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" VerticalAlignment="Center"/>
               <Border Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="4" Padding="5,1">
@@ -74,7 +74,7 @@
           </Button>
 
           <!-- Ambient Sound Quick Selector Pill -->
-          <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="18" Padding="10,4" Margin="0,0,12,0">
+          <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="18" Padding="10,4" Margin="0,0,10,0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
               <TextBlock Text="🎧 Ambient:" Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
               <ComboBox SelectedValue="{Binding SelectedAmbientSound}" Width="135" Height="24" FontSize="11" Margin="0,0,6,0"
@@ -104,11 +104,23 @@
 
         <!-- Right Header Status Badges & Controls -->
         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-          <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="12" Padding="10,5" Margin="0,0,10,0">
+          <!-- Strict Mode Toggle Badge -->
+          <Button Command="{Binding ToggleStrictModeCommand}" Style="{StaticResource SecondaryButton}" Padding="8,4" Margin="0,0,6,0"
+                  ToolTip="Toggle Strict Anti-Cheat Lock (Zero Loopholes)">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-              <TextBlock Text="🛡️ FEEDS SUPPRESSED" Foreground="{DynamicResource ThemeAccent}" FontSize="10" FontWeight="Bold"/>
+              <TextBlock Text="🔒 " FontSize="11" VerticalAlignment="Center"/>
+              <TextBlock Text="{Binding StrictModeStatusText}" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
             </StackPanel>
-          </Border>
+          </Button>
+
+          <!-- YouTube Study Mode Toggle Badge -->
+          <Button Command="{Binding ToggleYouTubeStudyModeCommand}" Style="{StaticResource SecondaryButton}" Padding="8,4" Margin="0,0,8,0"
+                  ToolTip="Toggle YouTube Study Mode (Blocks Shorts, keeps lectures)">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+              <TextBlock Text="📺 Study Mode" FontSize="10" FontWeight="Bold" Foreground="#10B981"/>
+            </StackPanel>
+          </Button>
+
           <!-- Theme Toggle Button -->
           <Button Command="{Binding ToggleThemeCommand}" Style="{StaticResource SecondaryButton}" Padding="10,6" Margin="0,0,8,0" ToolTip="Toggle Dark / Warm Paper Theme">
             <TextBlock Text="🌓" FontSize="13" VerticalAlignment="Center"/>
@@ -137,22 +149,22 @@
                 <TextBlock Text="." FontSize="14" FontWeight="Black" Foreground="{DynamicResource ThemeAccent}" Margin="0,-3,2,0"/>
                 <TextBlock Text="focus" FontSize="11" FontWeight="Light" Foreground="{DynamicResource ThemeTextSecondary}"/>
               </StackPanel>
-              <TextBlock Text="Student OS • 100% Offline SQLite" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+              <TextBlock Text="Regain Edition • Study more, scroll less" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
             </StackPanel>
           </Border>
 
           <!-- Navigation Links -->
           <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
-              <!-- Focus & Shields Section -->
-              <TextBlock Text="FOCUS &amp; SHIELDS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="12,4,0,6"/>
-              <Button Content="⏱️   Focus Studio" Command="{Binding NavigateCommand}" CommandParameter="Focus" Style="{StaticResource NavButton}"/>
+              <!-- Regain Attention & Digital Habits -->
+              <TextBlock Text="REGAIN DIGITAL HABITS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="12,4,0,6"/>
+              <Button Content="⏱️   Focus Studio (Regain)" Command="{Binding NavigateCommand}" CommandParameter="Focus" Style="{StaticResource NavButton}"/>
+              <Button Content="🧘   Screen Time &amp; Budgets" Command="{Binding NavigateCommand}" CommandParameter="Detox" Style="{StaticResource NavButton}"/>
+              <Button Content="🚫   Shorts &amp; Reels Shield" Command="{Binding NavigateCommand}" CommandParameter="Shorts" Style="{StaticResource NavButton}"/>
+              <Button Content="👥   Regain Together (Rooms)" Command="{Binding NavigateCommand}" CommandParameter="Together" Style="{StaticResource NavButton}"/>
               <Button Content="🏠   Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Style="{StaticResource NavButton}"/>
               <Button Content="🎮   Game Shield" Command="{Binding NavigateCommand}" CommandParameter="GameShield" Style="{StaticResource NavButton}"/>
               <Button Content="🛡️   Safe Browsing &amp; DNS" Command="{Binding NavigateCommand}" CommandParameter="SafeBrowsing" Style="{StaticResource NavButton}"/>
-              <Button Content="🚫   Shorts &amp; Reels Shield" Command="{Binding NavigateCommand}" CommandParameter="Shorts" Style="{StaticResource NavButton}"/>
-              <Button Content="🧘   Screen Time &amp; Budgets" Command="{Binding NavigateCommand}" CommandParameter="Detox" Style="{StaticResource NavButton}"/>
-              <Button Content="👥   Quietora Together" Command="{Binding NavigateCommand}" CommandParameter="Together" Style="{StaticResource NavButton}"/>
 
               <Separator Background="{DynamicResource ThemeCardBorder}" Margin="6,8"/>
 
@@ -349,15 +361,35 @@
                   </StackPanel>
                 </Border>
 
-                <Border Background="#FEF2F2" BorderBrush="#F87171" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,16">
+                <!-- YouTube Study Mode Card (Regain Feature) -->
+                <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="#10B981" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,14">
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="*"/>
                       <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                      <TextBlock Text="🎯 Selective Shorts &amp; Reels Only Mode" FontWeight="Bold" FontSize="13" Foreground="#DC2626"/>
-                      <TextBlock Text="When enabled, Quietora allows educational YouTube &amp; Instagram lectures, but instantly closes when you click 'Shorts' or 'Reels'!" FontSize="11" Foreground="#991B1B" Margin="0,3,0,0" TextWrapping="Wrap"/>
+                      <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                        <TextBlock Text="📺 YouTube Study Mode (Learn Without Distraction)" FontWeight="Bold" FontSize="13" Foreground="#10B981"/>
+                        <Border Background="#065F46" CornerRadius="4" Padding="6,2" Margin="10,0,0,0">
+                          <TextBlock Text="REGAIN STUDY MODE" FontSize="9" FontWeight="Bold" Foreground="#34D399"/>
+                        </Border>
+                      </StackPanel>
+                      <TextBlock Text="Watch educational lectures and tutorials while completely blocking YouTube Shorts, algorithmic home feeds, and recommendations." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,3,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <CheckBox Grid.Column="1" Content="Active" IsChecked="{Binding IsYouTubeStudyMode}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                  </Grid>
+                </Border>
+
+                <Border Background="#2A1815" BorderBrush="#E55337" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,16">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                      <TextBlock Text="🎯 Selective Shorts &amp; Reels Only Mode" FontWeight="Bold" FontSize="13" Foreground="#E55337"/>
+                      <TextBlock Text="When enabled, Quietora allows educational YouTube &amp; Instagram messages, but instantly intercepts when you click 'Shorts' or 'Reels'!" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,3,0,0" TextWrapping="Wrap"/>
                     </StackPanel>
                     <CheckBox Grid.Column="1" Content="Enabled" IsChecked="{Binding BlockShortsAndReelsOnly}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                   </Grid>
@@ -463,25 +495,54 @@
             </Border>
           </StackPanel>
 
-          <!-- 4. FOCUS STUDIO PAGE (Quietora Interactive Attention Engine) -->
+          <!-- 4. FOCUS STUDIO PAGE (Quietora Interactive Attention Engine - Regain Edition) -->
           <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Focus}">
-            <TextBlock Text="SYSTEMS &amp; HUMAN-INTERFACE STUDIO" Style="{StaticResource EyebrowText}"/>
+            <TextBlock Text="SYSTEMS &amp; HUMAN-INTERFACE STUDIO • REGAIN ON WINDOWS" Style="{StaticResource EyebrowText}"/>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-              <TextBlock Text="Your screen. Your time. " FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
-              <TextBlock Text="Your call." FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" FontStyle="Italic"/>
+              <TextBlock Text="Study more. " FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+              <TextBlock Text="Scroll less." FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" FontStyle="Italic"/>
             </StackPanel>
-            <TextBlock Text="A calmer way to study and work on your PC. Designed to help you begin without friction, stay with the task and finish feeling like your attention was well spent." Style="{StaticResource PageSubtitle}"/>
+            <TextBlock Text="The focus timer that helps you study more and scroll less. Lock in your session, block addictive feeds, and eliminate doomscrolling on Windows." Style="{StaticResource PageSubtitle}"/>
 
-            <!-- Interactive Mode Pill Segmented Selector (from Quietora Website Demo) -->
-            <Border Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="24" Padding="6,5" Margin="0,0,0,20" HorizontalAlignment="Left">
-              <StackPanel Orientation="Horizontal">
-                <Button Content="25 min Focus" Command="{Binding SetTimerPresetCommand}" CommandParameter="25" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
-                <Button Content="45 min Deep Work" Command="{Binding SetTimerPresetCommand}" CommandParameter="45" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
-                <Button Content="50 min Block" Command="{Binding SetTimerPresetCommand}" CommandParameter="50" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
-                <Button Content="5 min Break" Command="{Binding SetTimerPresetCommand}" CommandParameter="5" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
-                <Button Content="15 min Reset" Command="{Binding SetTimerPresetCommand}" CommandParameter="15" Style="{StaticResource SegmentedPillButton}"/>
+            <!-- Interactive Mode Pill Segmented Selector & Regain Anti-Cheat Bar -->
+            <Grid Margin="0,0,0,18">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+
+              <!-- Mode Pills -->
+              <Border Background="{DynamicResource ThemeCardBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="24" Padding="6,5" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                  <Button Content="25 min Focus" Command="{Binding SetTimerPresetCommand}" CommandParameter="25" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                  <Button Content="45 min Deep Work" Command="{Binding SetTimerPresetCommand}" CommandParameter="45" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                  <Button Content="50 min Block" Command="{Binding SetTimerPresetCommand}" CommandParameter="50" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                  <Button Content="5 min Break" Command="{Binding SetTimerPresetCommand}" CommandParameter="5" Style="{StaticResource SegmentedPillButton}" Margin="0,0,6,0"/>
+                  <Button Content="15 min Reset" Command="{Binding SetTimerPresetCommand}" CommandParameter="15" Style="{StaticResource SegmentedPillButton}"/>
+                </StackPanel>
+              </Border>
+
+              <!-- Regain Zero-Loophole Switches -->
+              <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- Strict Mode Toggle -->
+                <Button Command="{Binding ToggleStrictModeCommand}" Style="{StaticResource SecondaryButton}" Padding="12,7" Margin="0,0,10,0"
+                        ToolTip="When Strict Mode is ON, session cannot be ended early or bypassed.">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="🔒 Strict Mode: " FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                    <TextBlock Text="{Binding StrictModeStatusText}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
+                  </StackPanel>
+                </Button>
+
+                <!-- YouTube Study Mode Toggle -->
+                <Button Command="{Binding ToggleYouTubeStudyModeCommand}" Style="{StaticResource SecondaryButton}" Padding="12,7"
+                        ToolTip="Blocks YouTube Shorts &amp; algorithmic recommendations; keeps lectures &amp; educational search open.">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="📺 YouTube Study Mode" FontSize="11" FontWeight="Bold" Foreground="#10B981"/>
+                  </StackPanel>
+                </Button>
               </StackPanel>
-            </Border>
+            </Grid>
 
             <Grid>
               <Grid.ColumnDefinitions>
@@ -517,13 +578,26 @@
                     <StackPanel HorizontalAlignment="Center">
                       <!-- Big Tabular Display -->
                       <TextBlock Text="{Binding TimerDisplay}" FontSize="82" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
-                      <TextBlock Text="Deep work, one step at a time." FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" Margin="0,2,0,16"/>
+                      <TextBlock Text="Study more, scroll less • Round 1 of 4" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" Margin="0,2,0,16"/>
 
                       <!-- Coral Gradient Progress Bar -->
                       <Border Width="380" Height="8" CornerRadius="4" Background="{DynamicResource ThemeInputBorder}" ClipToBounds="True">
                         <ProgressBar Value="{Binding TimerProgress, Mode=OneWay}" Height="8" Width="380" Minimum="0" Maximum="100" Foreground="{DynamicResource ThemeAccent}" BorderThickness="0" Background="Transparent"/>
                       </Border>
                     </StackPanel>
+                  </Border>
+
+                  <!-- Strict Mode Zero Loopholes Warning Banner (Visible when session is active and strict) -->
+                  <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="10" Padding="12,8" Margin="0,0,0,16"
+                          Visibility="{Binding IsSessionActive, Converter={StaticResource BoolToVis}}">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBlock Text="🔒" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                      <TextBlock Grid.Column="1" Text="STRICT MODE ENGAGED — Anti-cheat shield active. Quitting early is disabled to protect your flow." FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource ThemeAccent}" VerticalAlignment="Center"/>
+                    </Grid>
                   </Border>
 
                   <!-- Secondary Status Chips (from Quietora Website) -->
@@ -1262,8 +1336,28 @@
           <!-- 16. QUIETORA TOGETHER (STUDY ROOMS)        -->
           <!-- ========================================== -->
           <StackPanel Visibility="{Binding ActivePage, Converter={StaticResource PageVisibilityConverter}, ConverterParameter=Together}">
-            <TextBlock Text="👥 Quietora Together — Collaborative Study Rooms" Style="{StaticResource PageTitle}"/>
-            <TextBlock Text="Real-time synchronized study sessions with authoritative timers, presence, and zero-leakage privacy." Style="{StaticResource PageSubtitle}"/>
+            <TextBlock Text="👥 Regain Together — Multiplayer Virtual Study Rooms" Style="{StaticResource PageTitle}"/>
+            <TextBlock Text="Study with 3,400+ students and friends in real-time. Synchronized authoritative timers, presence, and zero-leakage privacy." Style="{StaticResource PageSubtitle}"/>
+
+            <!-- Global Live Study Hub Bar -->
+            <Border Style="{StaticResource CardBorder}" Margin="0,0,0,16">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                  <TextBlock Text="GLOBAL STUDY ROOMS (LIVE)" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
+                  <WrapPanel>
+                    <Button Content="🏛️ Silent Library (2,410 online)" Command="{Binding SelectCoworkingRoomCommand}" CommandParameter="Silent Deep Work Library" Style="{StaticResource SecondaryButton}" Padding="10,5" Margin="0,0,8,6" FontSize="11"/>
+                    <Button Content="☕ Rainy Lofi Cafe (1,850 online)" Command="{Binding SelectCoworkingRoomCommand}" CommandParameter="Rainy Lofi Cafe" Style="{StaticResource SecondaryButton}" Padding="10,5" Margin="0,0,8,6" FontSize="11"/>
+                    <Button Content="🌙 Late Night Hall (940 online)" Command="{Binding SelectCoworkingRoomCommand}" CommandParameter="Late Night Study Hall" Style="{StaticResource SecondaryButton}" Padding="10,5" Margin="0,0,8,6" FontSize="11"/>
+                    <Button Content="🚀 Code &amp; Systems Lab (1,120 online)" Command="{Binding SelectCoworkingRoomCommand}" CommandParameter="Code &amp; Systems Lab" Style="{StaticResource SecondaryButton}" Padding="10,5" Margin="0,0,8,6" FontSize="11"/>
+                  </WrapPanel>
+                </StackPanel>
+                <Button Grid.Column="1" Content="📋 Invite / Copy Code" Command="{Binding CopyRoomCodeCommand}" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center" Padding="14,8"/>
+              </Grid>
+            </Border>
 
             <Grid>
               <Grid.ColumnDefinitions>
@@ -1755,25 +1849,36 @@
     </Border>
 
     <!-- MINDFUL FRICTION OVERLAY (REGAIN / ONE SEC BREATHING INTERCEPT) -->
-    <Grid Grid.RowSpan="3" Background="#B0000000" Visibility="{Binding IsMindfulFrictionActive, Converter={StaticResource BoolToVis}}">
-      <Border Width="520" Background="{DynamicResource ThemeCardBg}" BorderBrush="#10B981" BorderThickness="2"
-              CornerRadius="16" Padding="28" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Grid.RowSpan="3" Background="#D0000000" Visibility="{Binding IsMindfulFrictionActive, Converter={StaticResource BoolToVis}}">
+      <Border Width="540" Background="{DynamicResource ThemeCardBg}" BorderBrush="#10B981" BorderThickness="2"
+              CornerRadius="20" Padding="32" HorizontalAlignment="Center" VerticalAlignment="Center">
         <StackPanel HorizontalAlignment="Center">
           <!-- Calm Pulsing Breathing Orb -->
-          <Border Width="72" Height="72" CornerRadius="36" Background="#10B981" Margin="0,0,0,16" HorizontalAlignment="Center">
-            <TextBlock Text="🧘" FontSize="34" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <Border Width="80" Height="80" CornerRadius="40" Background="#10B981" Margin="0,0,0,16" HorizontalAlignment="Center">
+            <TextBlock Text="🧘" FontSize="38" HorizontalAlignment="Center" VerticalAlignment="Center"/>
           </Border>
 
-          <TextBlock Text="Take a deep breath..." FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
-          <TextBlock Text="{Binding FrictionCountdownSeconds, StringFormat='Hold and exhale ({0}s)'}" FontSize="13" Foreground="#10B981" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,4,0,12"/>
+          <TextBlock Text="Take a deep breath..." FontSize="22" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
+          <TextBlock Text="{Binding FrictionCountdownSeconds, StringFormat='Inhale... Exhale ({0}s)'}" FontSize="14" Foreground="#10B981" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,4,0,14"/>
 
-          <TextBlock Text="{Binding FrictionTargetName, StringFormat='You are about to open {0}'}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center"/>
-          <TextBlock Text="{Binding FrictionPrompt}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,20"/>
+          <Border Background="{DynamicResource ThemeHoverBg}" BorderBrush="{DynamicResource ThemeCardBorder}" BorderThickness="1" CornerRadius="10" Padding="14,8" Margin="0,0,0,14" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="Intercepted: " FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+              <TextBlock Text="{Binding FrictionTargetName}" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
+            </StackPanel>
+          </Border>
+
+          <TextBlock Text="{Binding FrictionPrompt}" FontSize="13" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,14"/>
+
+          <!-- Dopamine Stats Pill -->
+          <Border Background="{DynamicResource ThemeAccentSubtle}" CornerRadius="12" Padding="12,6" Margin="0,0,0,22">
+            <TextBlock Text="✨ Study more, scroll less • Rewire dopamine habits" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" HorizontalAlignment="Center"/>
+          </Border>
 
           <!-- Conscious Action Buttons -->
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="🌟 Close &amp; Regain Focus" Command="{Binding AcceptFrictionCloseCommand}" Style="{StaticResource PrimaryButton}" Padding="16,8" Margin="0,0,12,0"/>
-            <Button Content="⏳ 2-Min Mindful Break" Command="{Binding TakeTwoMinBreakCommand}" Style="{StaticResource SecondaryButton}" Padding="14,8"/>
+            <Button Content="🌟 Back to Studying (+5m saved)" Command="{Binding AcceptFrictionCloseCommand}" Style="{StaticResource PrimaryButton}" Padding="18,10" Margin="0,0,12,0"/>
+            <Button Content="⏳ 2-Min Mindful Break" Command="{Binding TakeTwoMinBreakCommand}" Style="{StaticResource SecondaryButton}" Padding="16,10"/>
           </StackPanel>
         </StackPanel>
       </Border>

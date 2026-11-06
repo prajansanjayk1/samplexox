@@ -94,6 +94,7 @@ async function applyDnrRules(policy) {
   ];
   const allowlist = [...DEFAULT_ALLOWLIST, ...(policy.allowlistedDomains ?? [])];
   const blockShortsOnly = policy.blockShortsOnly ?? false;
+  const youTubeStudyMode = policy.youTubeStudyMode ?? true;
 
   const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
   const ruleIdsToRemove = existingRules.map(r => r.id);
@@ -134,11 +135,13 @@ async function applyDnrRules(policy) {
     }
   }
 
-  // 3. Short-Form Video Interceptor (Priority 2200)
-  // When active, intercepts shorts and reels
-  if (isFocusActive || blockShortsOnly) {
+  // 3. Short-Form Video & YouTube Study Mode Interceptor (Priority 2200)
+  // When active, intercepts shorts and reels (Regain Style: Study more, scroll less)
+  if (isFocusActive || blockShortsOnly || youTubeStudyMode) {
     const shortFormPaths = [
       "*://*.youtube.com/shorts*",
+      "*://*.youtube.com/feed/explore*",
+      "*://*.youtube.com/feed/trending*",
       "*://*.instagram.com/reels*",
       "*://*.instagram.com/explore*",
       "*://*.tiktok.com/*",
@@ -164,10 +167,15 @@ async function applyDnrRules(policy) {
   }
 
   // 4. Whole Website Blocks (Priority 1500)
+  // If YouTube Study Mode is on, we exclude youtube.com from full-site blocking so tutorials/lectures play!
   if (isFocusActive && !blockShortsOnly) {
     for (const site of blockedSites) {
       const clean = site.toLowerCase().replace("https://", "").replace("http://", "").replace("www.", "").trim();
       if (!clean) continue;
+      if (youTubeStudyMode && clean.includes("youtube.com")) {
+        // Handled selectively via YouTube Study Mode (Shorts & Feeds blocked above)
+        continue;
+      }
 
       newRules.push({
         id: ruleId++,

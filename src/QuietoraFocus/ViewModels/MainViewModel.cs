@@ -73,6 +73,8 @@ public sealed class MainViewModel : ObservableObject
     private int _doomscrollsAvertedCount;
     private int _distractingScreenMinutesToday;
     private bool _blockShortsAndReelsOnly;
+    private bool _isStrictMode = true;
+    private bool _isYouTubeStudyMode = true;
     private bool _bedtimeShieldEnabled = true;
     private TimeSpan _bedtimeStart = new(22, 30, 0); // 10:30 PM
     private TimeSpan _bedtimeEnd = new(7, 0, 0);     // 07:00 AM
@@ -220,6 +222,10 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand SetTimerPresetCommand { get; }
     public RelayCommand ResetTimerCommand { get; }
     public RelayCommand ToggleThemeCommand { get; }
+    public RelayCommand ToggleStrictModeCommand { get; }
+    public RelayCommand ToggleYouTubeStudyModeCommand { get; }
+    public RelayCommand SelectCoworkingRoomCommand { get; }
+    public RelayCommand CopyRoomCodeCommand { get; }
     public RelayCommand DismissNotificationCommand { get; }
 
     public RelayCommand AddBlockedAppCommand { get; }
@@ -348,6 +354,10 @@ public sealed class MainViewModel : ObservableObject
         SetTimerPresetCommand = new RelayCommand(p => ExecuteSetTimerPreset(p));
         ResetTimerCommand = new RelayCommand(ExecuteResetTimer);
         ToggleThemeCommand = new RelayCommand(() => IsDarkMode = !IsDarkMode);
+        ToggleStrictModeCommand = new RelayCommand(ExecuteToggleStrictMode);
+        ToggleYouTubeStudyModeCommand = new RelayCommand(ExecuteToggleYouTubeStudyMode);
+        SelectCoworkingRoomCommand = new RelayCommand(ExecuteSelectCoworkingRoom);
+        CopyRoomCodeCommand = new RelayCommand(ExecuteCopyRoomCode);
         DismissNotificationCommand = new RelayCommand(() => IsNotificationVisible = false);
 
         // Distractions
@@ -447,6 +457,8 @@ public sealed class MainViewModel : ObservableObject
         _soundAlertsEnabled = _settingsRepo.GetBool("sound_alerts", true);
         _isHostsBlockingEnabled = _settingsRepo.GetBool("hosts_blocking", false);
         _blockShortsAndReelsOnly = _settingsRepo.GetBool("block_shorts_reels_only", false);
+        _isStrictMode = _settingsRepo.GetBool("strict_mode", true);
+        _isYouTubeStudyMode = _settingsRepo.GetBool("youtube_study_mode", true);
         _bedtimeShieldEnabled = _settingsRepo.GetBool("bedtime_shield_enabled", true);
 
         var enfRaw = _settingsRepo.GetInt("enforcement_mode", (int)DistractionEnforcementMode.Hardcore);
@@ -668,6 +680,34 @@ public sealed class MainViewModel : ObservableObject
             if (SetProperty(ref _blockShortsAndReelsOnly, value))
             {
                 _settingsRepo.SetBool("block_shorts_reels_only", value);
+            }
+        }
+    }
+
+    public bool IsStrictMode
+    {
+        get => _isStrictMode;
+        set
+        {
+            if (SetProperty(ref _isStrictMode, value))
+            {
+                _settingsRepo.SetBool("strict_mode", value);
+                OnPropertyChanged(nameof(StrictModeStatusText));
+            }
+        }
+    }
+
+    public string StrictModeStatusText => IsStrictMode ? "🔒 ANTI-CHEAT LOCKED" : "FLEXIBLE";
+
+    public bool IsYouTubeStudyMode
+    {
+        get => _isYouTubeStudyMode;
+        set
+        {
+            if (SetProperty(ref _isYouTubeStudyMode, value))
+            {
+                _settingsRepo.SetBool("youtube_study_mode", value);
+                SyncBrowserShieldPolicy();
             }
         }
     }
@@ -1454,6 +1494,11 @@ public sealed class MainViewModel : ObservableObject
     private void ExecutePauseSession()
     {
         if (!IsSessionActive || IsSessionPaused) return;
+        if (IsStrictMode)
+        {
+            ShowNotification("🔒 Strict Anti-Cheat Active: No pausing! Stay locked in and finish your study round.");
+            return;
+        }
         _sessionSm.Pause();
         IsSessionPaused = true;
         TimerSubText = "SESSION PAUSED";
@@ -1471,9 +1516,21 @@ public sealed class MainViewModel : ObservableObject
         AppLogger.LogInfo("Session resumed.");
     }
 
-    private void ExecuteStopSession() => EndSessionInternal("stopped");
+    private void ExecuteStopSession()
+    {
+        if (IsStrictMode && IsSessionActive)
+        {
+            ShowNotification("🔒 Strict Mode Active: No quitting early! Zero loopholes. Protect your study flow.");
+            return;
+        }
+        EndSessionInternal("stopped");
+    }
 
-    private void ExecuteEmergencyStop() => EndSessionInternal("emergency");
+    private void ExecuteEmergencyStop()
+    {
+        ShowNotification("🚨 Emergency Override used. Focus session ended early.");
+        EndSessionInternal("emergency");
+    }
 
     private void ExecuteQuickStart()
     {
@@ -1698,12 +1755,19 @@ public sealed class MainViewModel : ObservableObject
         // C. Check Short-Form Doomscroll Feeds (YouTube Shorts, Instagram Reels, TikTok, Reddit Endless) & Blocked Sites
         if (!isDistraction && isBrowser)
         {
-            bool onlyShorts = BlockShortsAndReelsOnly && !IsSessionActive;
+            bool onlyShorts = (BlockShortsAndReelsOnly || IsYouTubeStudyMode) && (!IsSessionActive || IsYouTubeStudyMode);
             if (WebsiteMatcher.TryMatchBlockedWebsite(title, _blockedWebsites, onlyShorts, out var matchedSite, out isShortsOrReels) && matchedSite != null)
             {
-                isDistraction = true;
-                distractionDetail = isShortsOrReels ? matchedSite.DisplayName : $"{matchedSite.DisplayName} ({matchedSite.Domain})";
-                isWebsite = true;
+                if (IsYouTubeStudyMode && !isShortsOrReels && matchedSite.Domain.Contains("youtube", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Educational YouTube playback allowed under YouTube Study Mode
+                }
+                else
+                {
+                    isDistraction = true;
+                    distractionDetail = isShortsOrReels ? matchedSite.DisplayName : $"{matchedSite.DisplayName} ({matchedSite.Domain})";
+                    isWebsite = true;
+                }
             }
         }
 
@@ -1936,6 +2000,65 @@ public sealed class MainViewModel : ObservableObject
             new() { Name = "Aarav K.", AvatarEmoji = "📐", ActiveTask = "Calculus & Linear Algebra", Status = "Pomodoro Break (3m)", ElapsedMinutes = 25, TodayStreakDays = 9, IsOnline = true },
             new() { Name = "Elena S.", AvatarEmoji = "🎨", ActiveTask = "Product UI Architecture", Status = "Deep Focus (51m)", ElapsedMinutes = 51, TodayStreakDays = 30, IsOnline = true }
         };
+    }
+
+    private void ExecuteToggleStrictMode()
+    {
+        IsStrictMode = !IsStrictMode;
+        ShowNotification(IsStrictMode
+            ? "🔒 Strict Mode Enabled: Anti-cheat lock engaged. Zero loopholes."
+            : "Flexible Mode: You may pause or stop sessions as needed.");
+    }
+
+    private void ExecuteToggleYouTubeStudyMode()
+    {
+        IsYouTubeStudyMode = !IsYouTubeStudyMode;
+        ShowNotification(IsYouTubeStudyMode
+            ? "📺 YouTube Study Mode: Shorts & recommendation feeds blocked; lectures allowed!"
+            : "YouTube Study Mode Disabled.");
+    }
+
+    private void ExecuteSelectCoworkingRoom(object? param)
+    {
+        if (param is not string roomName || string.IsNullOrWhiteSpace(roomName)) return;
+        SelectedCoworkingRoom = roomName;
+        if (roomName.Contains("Lofi") || roomName.Contains("Cafe"))
+        {
+            CoworkingPeers = new ObservableCollection<CoworkingPeer>
+            {
+                new() { Name = "Liam K.", AvatarEmoji = "☕", ActiveTask = "Calculus Problem Set", Status = "Deep Focus (34m)", ElapsedMinutes = 34, TodayStreakDays = 12, IsOnline = true },
+                new() { Name = "Zoe M.", AvatarEmoji = "🎧", ActiveTask = "Anki Flashcard Drill", Status = "Deep Focus (45m)", ElapsedMinutes = 45, TodayStreakDays = 18, IsOnline = true },
+                new() { Name = "Hannah B.", AvatarEmoji = "📖", ActiveTask = "Literature Review", Status = "Pomodoro Break (4m)", ElapsedMinutes = 25, TodayStreakDays = 6, IsOnline = true }
+            };
+        }
+        else if (roomName.Contains("Code") || roomName.Contains("Systems"))
+        {
+            CoworkingPeers = new ObservableCollection<CoworkingPeer>
+            {
+                new() { Name = "Lucas M.", AvatarEmoji = "👨‍💻", ActiveTask = "Rust Engine Architecture", Status = "Deep Focus (72m)", ElapsedMinutes = 72, TodayStreakDays = 24, IsOnline = true },
+                new() { Name = "Devin S.", AvatarEmoji = "⚡", ActiveTask = "GPU Kernel Optimization", Status = "Deep Focus (58m)", ElapsedMinutes = 58, TodayStreakDays = 15, IsOnline = true },
+                new() { Name = "Priya R.", AvatarEmoji = "👩‍💻", ActiveTask = "Distributed Systems Debugging", Status = "Deep Focus (41m)", ElapsedMinutes = 41, TodayStreakDays = 19, IsOnline = true }
+            };
+        }
+        else
+        {
+            InitializeCoworkingPeers();
+        }
+        ShowNotification($"Joined study room: {roomName}. 2,400+ peers online.");
+    }
+
+    private void ExecuteCopyRoomCode()
+    {
+        var code = !string.IsNullOrWhiteSpace(ActiveStudyRoom?.RoomCode) ? ActiveStudyRoom.RoomCode : "REGAIN-4892";
+        try
+        {
+            Clipboard.SetText(code);
+            ShowNotification($"📋 Room code '{code}' copied to clipboard! Invite your classmates to study.");
+        }
+        catch
+        {
+            ShowNotification($"Room Code: {code}");
+        }
     }
 
     private void RefreshDetoxMetrics()
@@ -2720,6 +2843,7 @@ public sealed class MainViewModel : ObservableObject
                 SessionMode = SelectedSessionMode.ToString(),
                 IsAdultShieldActive = IsAdultProtectionEnabled,
                 BlockShortsOnly = BlockShortsAndReelsOnly && !IsSessionActive,
+                YouTubeStudyMode = IsYouTubeStudyMode,
                 BlockedWebsites = BlockedWebsites.Where(s => s.IsActive).Select(s => s.Domain).ToList(),
                 AllowlistedDomains = new List<string> { "mit.edu", "canvas.instructure.com", "coursera.org", "edx.org", "github.com", "stackoverflow.com", "wikipedia.org", "arxiv.org" }
             };
