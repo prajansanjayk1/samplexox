@@ -1349,6 +1349,19 @@ public sealed class MainViewModel : ObservableObject
         set => SetProperty(ref _newAssignmentDueDays, value);
     }
 
+    public int NewAssignmentDaysDue
+    {
+        get => _newAssignmentDueDays;
+        set => SetProperty(ref _newAssignmentDueDays, value);
+    }
+
+    private string _newAssignmentDescription = "";
+    public string NewAssignmentDescription
+    {
+        get => _newAssignmentDescription;
+        set => SetProperty(ref _newAssignmentDescription, value);
+    }
+
     public string NewExamTitle
     {
         get => _newExamTitle;
@@ -1362,6 +1375,12 @@ public sealed class MainViewModel : ObservableObject
     }
 
     public int NewExamDateDays
+    {
+        get => _newExamDateDays;
+        set => SetProperty(ref _newExamDateDays, value);
+    }
+
+    public int NewExamDaysDue
     {
         get => _newExamDateDays;
         set => SetProperty(ref _newExamDateDays, value);
@@ -1395,7 +1414,24 @@ public sealed class MainViewModel : ObservableObject
     public StudyRoom? ActiveStudyRoom
     {
         get => _activeStudyRoom;
-        set => SetProperty(ref _activeStudyRoom, value);
+        set
+        {
+            if (SetProperty(ref _activeStudyRoom, value))
+            {
+                OnPropertyChanged(nameof(TogetherRoom));
+                OnPropertyChanged(nameof(IsInTogetherRoom));
+                OnPropertyChanged(nameof(TogetherTimerDisplay));
+            }
+        }
+    }
+
+    public StudyRoom? TogetherRoom => ActiveStudyRoom;
+    public bool IsInTogetherRoom => ActiveStudyRoom != null;
+
+    public string JoinRoomCodeInput
+    {
+        get => _togetherRoomCodeInput;
+        set => SetProperty(ref _togetherRoomCodeInput, value);
     }
 
     public string TogetherRoomCodeInput
@@ -1428,10 +1464,26 @@ public sealed class MainViewModel : ObservableObject
         set => SetProperty(ref _newRoomMinutesInput, value);
     }
 
+    public string ChatMessageInput
+    {
+        get => _togetherChatInput;
+        set => SetProperty(ref _togetherChatInput, value);
+    }
+
     public string TogetherChatInput
     {
         get => _togetherChatInput;
         set => SetProperty(ref _togetherChatInput, value);
+    }
+
+    public string TogetherTimerDisplay
+    {
+        get
+        {
+            if (ActiveStudyRoom == null) return "00:00";
+            var remaining = Math.Max(0, (ActiveStudyRoom.PlannedMinutes * 60) - ActiveStudyRoom.ElapsedSeconds);
+            return $"{remaining / 60:D2}:{remaining % 60:D2}";
+        }
     }
 
     // v4.0 Study AI Properties
@@ -1672,6 +1724,18 @@ public sealed class MainViewModel : ObservableObject
 
         // 4. Periodically evaluate active automation rules
         EvaluateAutomationEngine();
+
+        // 5. Update Active Study Room timer if running
+        if (ActiveStudyRoom != null && ActiveStudyRoom.IsSessionActive)
+        {
+            ActiveStudyRoom.ElapsedSeconds++;
+            OnPropertyChanged(nameof(TogetherTimerDisplay));
+            if (ActiveStudyRoom.ElapsedSeconds >= ActiveStudyRoom.PlannedMinutes * 60)
+            {
+                ActiveStudyRoom.IsSessionActive = false;
+                ShowNotification("🎉 Study Room Session Completed! Great teamwork.");
+            }
+        }
     }
 
     private void UpdateActiveTimerDisplay()
@@ -2987,6 +3051,7 @@ public sealed class MainViewModel : ObservableObject
         var assignment = new AcademicAssignment
         {
             Title = NewAssignmentTitle.Trim(),
+            Description = NewAssignmentDescription.Trim(),
             SubjectId = subId,
             DueDateUtc = DateTime.UtcNow.AddDays(NewAssignmentDueDays > 0 ? NewAssignmentDueDays : 7),
             Priority = 2,
@@ -2995,6 +3060,7 @@ public sealed class MainViewModel : ObservableObject
 
         _academicRepo.AddAssignment(assignment);
         NewAssignmentTitle = "";
+        NewAssignmentDescription = "";
         RefreshAllData();
         ShowNotification($"Added assignment '{assignment.Title}'.");
     }

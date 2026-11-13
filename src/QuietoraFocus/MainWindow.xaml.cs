@@ -28,9 +28,12 @@ public partial class MainWindow : Window
 
     private void Window_Closing(object? sender, CancelEventArgs e)
     {
-        if (DataContext is MainViewModel vm && vm.IsSessionActive)
+        if (DataContext is MainViewModel vm && (vm.IsSessionActive || vm.IsStrictMode))
         {
-            vm.StopSessionCommand.Execute(null);
+            e.Cancel = true;
+            Hide();
+            _trayService?.ShowBalloon("Quietora Focus Active", "Your focus session is running in the system tray. Double-click the tray icon anytime to restore the app.");
+            return;
         }
 
         _trayService?.Dispose();

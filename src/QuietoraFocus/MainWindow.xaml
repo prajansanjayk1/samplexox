@@ -158,35 +158,111 @@
             <StackPanel>
               <!-- Regain Attention & Digital Habits -->
               <TextBlock Text="REGAIN DIGITAL HABITS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="12,4,0,6"/>
-              <Button Content="⏱️   Focus Studio (Regain)" Command="{Binding NavigateCommand}" CommandParameter="Focus" Style="{StaticResource NavButton}"/>
-              <Button Content="🧘   Screen Time &amp; Budgets" Command="{Binding NavigateCommand}" CommandParameter="Detox" Style="{StaticResource NavButton}"/>
-              <Button Content="🚫   Shorts &amp; Reels Shield" Command="{Binding NavigateCommand}" CommandParameter="Shorts" Style="{StaticResource NavButton}"/>
-              <Button Content="👥   Regain Together (Rooms)" Command="{Binding NavigateCommand}" CommandParameter="Together" Style="{StaticResource NavButton}"/>
-              <Button Content="🏠   Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Style="{StaticResource NavButton}"/>
-              <Button Content="🎮   Game Shield" Command="{Binding NavigateCommand}" CommandParameter="GameShield" Style="{StaticResource NavButton}"/>
-              <Button Content="🛡️   Safe Browsing &amp; DNS" Command="{Binding NavigateCommand}" CommandParameter="SafeBrowsing" Style="{StaticResource NavButton}"/>
+              <Button Content="⏱️   Focus Studio (Regain)" Command="{Binding NavigateCommand}" CommandParameter="Focus" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Focus}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Focus}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Focus}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Focus}"/>
+              <Button Content="🧘   Screen Time &amp; Budgets" Command="{Binding NavigateCommand}" CommandParameter="Detox" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Detox}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Detox}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Detox}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Detox}"/>
+              <Button Content="🚫   Shorts &amp; Reels Shield" Command="{Binding NavigateCommand}" CommandParameter="Shorts" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Shorts}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Shorts}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Shorts}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Shorts}"/>
+              <Button Content="👥   Regain Together (Rooms)" Command="{Binding NavigateCommand}" CommandParameter="Together" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Together}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Together}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Together}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Together}"/>
+              <Button Content="🏠   Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Dashboard}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Dashboard}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Dashboard}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Dashboard}"/>
+              <Button Content="🎮   Game Shield" Command="{Binding NavigateCommand}" CommandParameter="GameShield" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=GameShield}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=GameShield}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=GameShield}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=GameShield}"/>
+              <Button Content="🛡️   Safe Browsing &amp; DNS" Command="{Binding NavigateCommand}" CommandParameter="SafeBrowsing" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=SafeBrowsing}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=SafeBrowsing}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=SafeBrowsing}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=SafeBrowsing}"/>
 
               <Separator Background="{DynamicResource ThemeCardBorder}" Margin="6,8"/>
 
               <!-- Academic Workspace -->
               <TextBlock Text="ACADEMIC WORKSPACE" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="12,4,0,6"/>
-              <Button Content="📚   Syllabus &amp; Subjects" Command="{Binding NavigateCommand}" CommandParameter="Planner" Style="{StaticResource NavButton}"/>
-              <Button Content="📝   Assignments" Command="{Binding NavigateCommand}" CommandParameter="Assignments" Style="{StaticResource NavButton}"/>
-              <Button Content="🎯   Exams &amp; Flashcards" Command="{Binding NavigateCommand}" CommandParameter="Exams" Style="{StaticResource NavButton}"/>
-              <Button Content="🧠   Study AI (Grounded)" Command="{Binding NavigateCommand}" CommandParameter="StudyAI" Style="{StaticResource NavButton}"/>
-              <Button Content="✅   Tasks &amp; Goals" Command="{Binding NavigateCommand}" CommandParameter="Tasks" Style="{StaticResource NavButton}"/>
-              <Button Content="💼   Resume Workspace" Command="{Binding NavigateCommand}" CommandParameter="Workspace" Style="{StaticResource NavButton}"/>
+              <Button Content="📚   Syllabus &amp; Subjects" Command="{Binding NavigateCommand}" CommandParameter="Planner" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Planner}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Planner}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Planner}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Planner}"/>
+              <Button Content="📝   Assignments" Command="{Binding NavigateCommand}" CommandParameter="Assignments" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Assignments}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Assignments}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Assignments}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Assignments}"/>
+              <Button Content="🎯   Exams &amp; Flashcards" Command="{Binding NavigateCommand}" CommandParameter="Exams" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Exams}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Exams}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Exams}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Exams}"/>
+              <Button Content="🧠   Study AI (Grounded)" Command="{Binding NavigateCommand}" CommandParameter="StudyAI" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=StudyAI}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=StudyAI}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=StudyAI}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=StudyAI}"/>
+              <Button Content="✅   Tasks &amp; Goals" Command="{Binding NavigateCommand}" CommandParameter="Tasks" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Tasks}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Tasks}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Tasks}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Tasks}"/>
+              <Button Content="💼   Resume Workspace" Command="{Binding NavigateCommand}" CommandParameter="Workspace" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Workspace}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Workspace}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Workspace}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Workspace}"/>
 
               <Separator Background="{DynamicResource ThemeCardBorder}" Margin="6,8"/>
 
               <!-- Intelligence & Tools -->
               <TextBlock Text="SYSTEM &amp; ANALYTICS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}" Margin="12,4,0,6"/>
-              <Button Content="📊   Productivity Analytics" Command="{Binding NavigateCommand}" CommandParameter="Analytics" Style="{StaticResource NavButton}"/>
-              <Button Content="🤖   AI Workspace Assistant" Command="{Binding NavigateCommand}" CommandParameter="AIAssistant" Style="{StaticResource NavButton}"/>
-              <Button Content="📁   PC Memory Search" Command="{Binding NavigateCommand}" CommandParameter="Memory" Style="{StaticResource NavButton}"/>
-              <Button Content="⚡   Automations" Command="{Binding NavigateCommand}" CommandParameter="Automation" Style="{StaticResource NavButton}"/>
-              <Button Content="🛡️   Privacy Center" Command="{Binding NavigateCommand}" CommandParameter="Privacy" Style="{StaticResource NavButton}"/>
-              <Button Content="⚙️   Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButton}"/>
+              <Button Content="📊   Productivity Analytics" Command="{Binding NavigateCommand}" CommandParameter="Analytics" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Analytics}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Analytics}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Analytics}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Analytics}"/>
+              <Button Content="🤖   AI Workspace Assistant" Command="{Binding NavigateCommand}" CommandParameter="AIAssistant" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=AIAssistant}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=AIAssistant}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=AIAssistant}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=AIAssistant}"/>
+              <Button Content="📁   PC Memory Search" Command="{Binding NavigateCommand}" CommandParameter="Memory" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Memory}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Memory}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Memory}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Memory}"/>
+              <Button Content="⚡   Automations" Command="{Binding NavigateCommand}" CommandParameter="Automation" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Automation}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Automation}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Automation}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Automation}"/>
+              <Button Content="🛡️   Privacy Center" Command="{Binding NavigateCommand}" CommandParameter="Privacy" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Privacy}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Privacy}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Privacy}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Privacy}"/>
+              <Button Content="⚙️   Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButton}"
+                      Background="{Binding ActivePage, Converter={StaticResource NavBgConverter}, ConverterParameter=Settings}"
+                      Foreground="{Binding ActivePage, Converter={StaticResource NavFgConverter}, ConverterParameter=Settings}"
+                      BorderBrush="{Binding ActivePage, Converter={StaticResource NavBorderConverter}, ConverterParameter=Settings}"
+                      FontWeight="{Binding ActivePage, Converter={StaticResource NavWeightConverter}, ConverterParameter=Settings}"/>
             </StackPanel>
           </ScrollViewer>
         </DockPanel>

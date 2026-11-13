@@ -28,6 +28,10 @@
     <conv:BoolToVisibilityConverter x:Key="BoolToVis"/>
     <conv:InverseBoolConverter x:Key="InverseBool"/>
     <conv:PriorityToColorConverter x:Key="PriorityColor"/>
+    <conv:EqualityToBrushConverter x:Key="NavBgConverter"/>
+    <conv:EqualityToForegroundConverter x:Key="NavFgConverter"/>
+    <conv:EqualityToBorderBrushConverter x:Key="NavBorderConverter"/>
+    <conv:EqualityToFontWeightConverter x:Key="NavWeightConverter"/>
 
     <!-- Typography: Quietora Labs Editorial Hierarchy -->
     <Style x:Key="EyebrowText" TargetType="TextBlock">
@@ -149,17 +153,18 @@
     <Style x:Key="NavButton" TargetType="Button">
       <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
       <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="3,0,0,0"/>
       <Setter Property="FontSize" Value="12.5"/>
       <Setter Property="FontWeight" Value="Medium"/>
       <Setter Property="HorizontalContentAlignment" Value="Left"/>
       <Setter Property="Padding" Value="12,9"/>
       <Setter Property="Margin" Value="0,2"/>
       <Setter Property="Cursor" Value="Hand"/>
-      <Setter Property="BorderThickness" Value="0"/>
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="Button">
-            <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" Padding="{TemplateBinding Padding}">
               <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
             </Border>
             <ControlTemplate.Triggers>
