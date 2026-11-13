@@ -5,7 +5,9 @@
         xmlns:models="clr-namespace:QuietoraFocus.Core.Models;assembly=QuietoraFocus.Core"
         Title="quietora. focus — Regain Edition • Study more, scroll less" Width="1280" Height="820"
         MinWidth="1050" MinHeight="680" WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource ThemeWindowBg}" FontFamily="Segoe UI"
+        Background="{DynamicResource ThemeWindowBg}"
+        FontFamily="Segoe UI Variable Display, Segoe UI Variable Text, Segoe UI, -apple-system, sans-serif"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType"
         Closing="Window_Closing">
 
   <Window.DataContext>
@@ -36,7 +38,7 @@
 
         <!-- Brand Logo: Official Quietora Labs Monogram Aperture -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-          <Border Width="38" Height="38" CornerRadius="12" Background="#161820" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1.5" Margin="0,0,12,0" VerticalAlignment="Center">
+          <Border Width="38" Height="38" CornerRadius="12" Background="#141824" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1.5" Margin="0,0,12,0" VerticalAlignment="Center">
             <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
               <!-- Outer Aperture Circle -->
               <Ellipse Width="16" Height="16" Canvas.Left="2" Canvas.Top="2" Stroke="#FFFFFF" StrokeThickness="2.4"/>
@@ -55,8 +57,15 @@
               <Border Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="10" Padding="8,2" Margin="10,0,0,0" VerticalAlignment="Center">
                 <TextBlock Text="STUDY MORE, SCROLL LESS" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}"/>
               </Border>
+              <!-- Zero Leakage Shield Badge -->
+              <Border Background="{DynamicResource ThemeMintBg}" BorderBrush="{DynamicResource ThemeMint}" BorderThickness="1" CornerRadius="10" Padding="8,2" Margin="8,0,0,0" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                  <Ellipse Width="5" Height="5" Fill="{DynamicResource ThemeMint}" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                  <TextBlock Text="ZERO-LEAKAGE SHIELD" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource ThemeMint}"/>
+                </StackPanel>
+              </Border>
             </StackPanel>
-            <TextBlock Text="The Windows Focus Timer &amp; Screen Time Manager • 100% Private" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,1,0,0"/>
+            <TextBlock Text="The Windows Focus Timer &amp; Screen Time Manager • 100% Private On-Device" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,1,0,0"/>
           </StackPanel>
         </StackPanel>
 
@@ -467,19 +476,19 @@
               </Grid.ColumnDefinitions>
 
               <!-- Detox Score Gauge -->
-              <Border Grid.Column="0" Style="{StaticResource CardBorder}" Background="#064E3B" BorderBrush="#059669">
+              <Border Grid.Column="0" Style="{StaticResource CardBorder}" Background="{DynamicResource ThemeMintBg}" BorderBrush="{DynamicResource ThemeMintBorder}">
                 <Grid>
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                   </Grid.ColumnDefinitions>
                   <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="DIGITAL DETOX SCORE" FontSize="11" FontWeight="Bold" Foreground="#A7F3D0"/>
+                    <TextBlock Text="DIGITAL DETOX SCORE" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeMint}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,2">
-                      <TextBlock Text="{Binding DetoxReport.DetoxScore}" FontSize="38" FontWeight="Bold" Foreground="White"/>
-                      <TextBlock Text=" / 100" FontSize="18" FontWeight="SemiBold" Foreground="#6EE7B7" VerticalAlignment="Bottom" Margin="0,0,0,6"/>
+                      <TextBlock Text="{Binding DetoxReport.DetoxScore}" FontSize="38" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                      <TextBlock Text=" / 100" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeMint}" VerticalAlignment="Bottom" Margin="0,0,0,6"/>
                     </StackPanel>
-                    <TextBlock Text="Brain dopamine regulated" FontSize="12" Foreground="#D1FAE5"/>
+                    <TextBlock Text="Brain dopamine regulated • Flow state optimal" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                   </StackPanel>
                   <TextBlock Grid.Column="1" Text="🧘" FontSize="44" VerticalAlignment="Center"/>
                 </Grid>
@@ -489,15 +498,15 @@
               <Border Grid.Column="2" Style="{StaticResource CardBorder}">
                 <StackPanel>
                   <TextBlock Text="DOPAMINE TIME SAVED" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
-                  <TextBlock Text="{Binding DetoxReport.TimeSavedFormatted}" FontSize="30" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding DetoxReport.TimeSavedFormatted}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource ThemeMint}" Margin="0,4,0,2"/>
                   <TextBlock Text="{Binding DetoxReport.DoomscrollsAvertedToday, StringFormat='{}{0} impulses intercepted'}" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
 
               <!-- Bedtime / Night Shield -->
-              <Border Grid.Column="4" Style="{StaticResource CardBorder}">
+              <Border Grid.Column="4" Style="{StaticResource CardBorder}" Background="{DynamicResource ThemeIndigoBg}" BorderBrush="{DynamicResource ThemeIndigoBorder}">
                 <StackPanel>
-                  <TextBlock Text="NIGHT SLEEP SHIELD" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                  <TextBlock Text="NIGHT SLEEP SHIELD" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeIndigo}"/>
                   <StackPanel Orientation="Horizontal" Margin="0,6,0,4">
                     <TextBlock Text="🌙 22:30 – 07:00" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
                   </StackPanel>
@@ -628,40 +637,56 @@
                 </Border>
 
                 <!-- Selective Shorts Only Mode Card -->
-                <Border Background="#2A1815" BorderBrush="#E55337" BorderThickness="1" CornerRadius="10" Padding="14" Margin="0,0,0,16">
+                <Border Background="{DynamicResource ThemeAccentSubtle}" BorderBrush="{DynamicResource ThemeAccent}" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,0,16">
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="*"/>
                       <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                      <TextBlock Text="🎯 Selective Shorts &amp; Reels Only Mode" FontWeight="Bold" FontSize="13" Foreground="#E55337"/>
+                      <TextBlock Text="🎯 Selective Shorts &amp; Reels Only Mode" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource ThemeAccent}"/>
                       <TextBlock Text="When enabled, Quietora allows educational YouTube &amp; Instagram messages, but instantly intercepts when you click 'Shorts' or 'Reels'!" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,3,0,0" TextWrapping="Wrap"/>
                     </StackPanel>
                     <CheckBox Grid.Column="1" Content="Enabled" IsChecked="{Binding BlockShortsAndReelsOnly}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
                   </Grid>
                 </Border>
 
-                <!-- Pre-Configured Feeds Grid -->
+                <!-- Pre-Configured Feeds Bento Grid -->
                 <Grid Margin="0,4">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
 
-                  <Border Grid.Column="0" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="0,0,8,0">
+                  <Border Grid.Column="0" Style="{StaticResource BentoCardElevated}" Margin="0,0,8,0">
                     <StackPanel>
-                      <TextBlock Text="📺 YouTube Shorts" FontWeight="Bold" FontSize="13"/>
-                      <TextBlock Text="Intercepts /shorts/ and #shorts video streams in Chrome, Edge, Firefox, Brave." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
-                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                      <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="📺 YouTube Shorts" FontWeight="Bold" FontSize="13"/>
+                        <Border Grid.Column="1" Background="{DynamicResource ThemeMintBg}" BorderBrush="{DynamicResource ThemeMint}" BorderThickness="1" Style="{StaticResource BadgePill}">
+                          <TextBlock Text="● ACTIVE" Foreground="{DynamicResource ThemeMint}" FontSize="9" FontWeight="Bold"/>
+                        </Border>
+                      </Grid>
+                      <TextBlock Text="Intercepts /shorts/ and #shorts video streams in Chrome, Edge, Firefox, Brave." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,4"/>
                     </StackPanel>
                   </Border>
 
-                  <Border Grid.Column="1" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="8,0,0,0">
+                  <Border Grid.Column="1" Style="{StaticResource BentoCardElevated}" Margin="8,0,0,0">
                     <StackPanel>
-                      <TextBlock Text="📸 Instagram Reels &amp; Explore" FontWeight="Bold" FontSize="13"/>
-                      <TextBlock Text="Intercepts infinite Reels feeds and algorithmic Explore tabs." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
-                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                      <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="📸 Instagram Reels &amp; Explore" FontWeight="Bold" FontSize="13"/>
+                        <Border Grid.Column="1" Background="{DynamicResource ThemeMintBg}" BorderBrush="{DynamicResource ThemeMint}" BorderThickness="1" Style="{StaticResource BadgePill}">
+                          <TextBlock Text="● ACTIVE" Foreground="{DynamicResource ThemeMint}" FontSize="9" FontWeight="Bold"/>
+                        </Border>
+                      </Grid>
+                      <TextBlock Text="Intercepts infinite Reels feeds and algorithmic Explore tabs." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,4"/>
                     </StackPanel>
                   </Border>
                 </Grid>
@@ -672,19 +697,35 @@
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
 
-                  <Border Grid.Column="0" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="0,0,8,0">
+                  <Border Grid.Column="0" Style="{StaticResource BentoCardElevated}" Margin="0,0,8,0">
                     <StackPanel>
-                      <TextBlock Text="🎵 TikTok Web" FontWeight="Bold" FontSize="13"/>
-                      <TextBlock Text="Intercepts all TikTok desktop sessions immediately." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
-                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                      <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="🎵 TikTok Web" FontWeight="Bold" FontSize="13"/>
+                        <Border Grid.Column="1" Background="{DynamicResource ThemeMintBg}" BorderBrush="{DynamicResource ThemeMint}" BorderThickness="1" Style="{StaticResource BadgePill}">
+                          <TextBlock Text="● ACTIVE" Foreground="{DynamicResource ThemeMint}" FontSize="9" FontWeight="Bold"/>
+                        </Border>
+                      </Grid>
+                      <TextBlock Text="Intercepts all TikTok desktop sessions immediately." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,4"/>
                     </StackPanel>
                   </Border>
 
-                  <Border Grid.Column="1" Background="{DynamicResource ThemeHoverBg}" CornerRadius="10" Padding="14" Margin="8,0,0,0">
+                  <Border Grid.Column="1" Style="{StaticResource BentoCardElevated}" Margin="8,0,0,0">
                     <StackPanel>
-                      <TextBlock Text="🤖 Reddit Endless Feeds" FontWeight="Bold" FontSize="13"/>
-                      <TextBlock Text="Blocks r/popular and infinite frontpage doomscrolling." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,8"/>
-                      <TextBlock Text="● Shield Active" Foreground="#10B981" FontSize="11" FontWeight="Bold"/>
+                      <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="🤖 Reddit Endless Feeds" FontWeight="Bold" FontSize="13"/>
+                        <Border Grid.Column="1" Background="{DynamicResource ThemeMintBg}" BorderBrush="{DynamicResource ThemeMint}" BorderThickness="1" Style="{StaticResource BadgePill}">
+                          <TextBlock Text="● ACTIVE" Foreground="{DynamicResource ThemeMint}" FontSize="9" FontWeight="Bold"/>
+                        </Border>
+                      </Grid>
+                      <TextBlock Text="Blocks r/popular and infinite frontpage doomscrolling." FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,2,0,4"/>
                     </StackPanel>
                   </Border>
                 </Grid>
@@ -713,41 +754,41 @@
               </Grid.ColumnDefinitions>
 
               <!-- 01 ATTENTION -->
-              <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+              <Border Grid.Column="0" Style="{StaticResource BentoCard}">
                 <StackPanel>
                   <TextBlock Text="01 / ATTENTION" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="FOCUSED TODAY" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
-                  <TextBlock Text="{Binding Metrics.TodayFocusMinutes, StringFormat='{}{0}m'}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding Metrics.TodayFocusMinutes, StringFormat='{}{0}m'}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4,0,2"/>
                   <TextBlock Text="{Binding Metrics.CompletionRate, StringFormat='{}{0:F0}% completion rate'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
 
               <!-- 02 RHYTHM -->
-              <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+              <Border Grid.Column="2" Style="{StaticResource BentoCard}">
                 <StackPanel>
                   <TextBlock Text="02 / RHYTHM" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="ACTIVE STREAK" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
-                  <TextBlock Text="{Binding Metrics.CurrentStreakDays, StringFormat='🔥 {0}d'}" FontSize="28" FontWeight="Bold" Foreground="#F59E0B" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding Metrics.CurrentStreakDays, StringFormat='🔥 {0}d'}" FontSize="32" FontWeight="Bold" Foreground="#F59E0B" Margin="0,4,0,2"/>
                   <TextBlock Text="{Binding Metrics.LongestStreakDays, StringFormat='Longest: {0} days'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
 
               <!-- 03 EXECUTION -->
-              <Border Grid.Column="4" Style="{StaticResource CardBorder}">
+              <Border Grid.Column="4" Style="{StaticResource BentoCard}">
                 <StackPanel>
                   <TextBlock Text="03 / EXECUTION" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="SESSIONS COMPLETED" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
-                  <TextBlock Text="{Binding Metrics.CompletedSessionsCount}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding Metrics.CompletedSessionsCount}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4,0,2"/>
                   <TextBlock Text="{Binding Metrics.TotalFocusMinutes, StringFormat='{}{0}m all-time flow'}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>
 
               <!-- 04 SHIELD -->
-              <Border Grid.Column="6" Style="{StaticResource CardBorder}">
+              <Border Grid.Column="6" Style="{StaticResource BentoCard}">
                 <StackPanel>
                   <TextBlock Text="04 / SHIELD" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ThemeAccent}" Margin="0,0,0,4"/>
                   <TextBlock Text="DOOMSCROLLS AVERTED" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextSecondary}"/>
-                  <TextBlock Text="{Binding DetoxReport.DoomscrollsAvertedToday}" FontSize="28" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,2"/>
+                  <TextBlock Text="{Binding DetoxReport.DoomscrollsAvertedToday}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource ThemeMint}" Margin="0,4,0,2"/>
                   <TextBlock Text="Impulses intercepted" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 </StackPanel>
               </Border>

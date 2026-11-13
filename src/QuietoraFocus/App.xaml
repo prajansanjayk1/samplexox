@@ -5,19 +5,27 @@
              Startup="Application_Startup">
   <Application.Resources>
     <!-- Dynamic Theme Brushes (Default: Quietora Labs Obsidian & Coral Flagship) -->
-    <SolidColorBrush x:Key="ThemeWindowBg" Color="#0E1015"/>
-    <SolidColorBrush x:Key="ThemeSidebarBg" Color="#12141A"/>
-    <SolidColorBrush x:Key="ThemeCardBg" Color="#181A22"/>
-    <SolidColorBrush x:Key="ThemeCardBorder" Color="#272B36"/>
+    <SolidColorBrush x:Key="ThemeWindowBg" Color="#0A0C11"/>
+    <SolidColorBrush x:Key="ThemeSidebarBg" Color="#0E1118"/>
+    <SolidColorBrush x:Key="ThemeCardBg" Color="#131721"/>
+    <SolidColorBrush x:Key="ThemeCardBorder" Color="#202737"/>
     <SolidColorBrush x:Key="ThemeTextPrimary" Color="#F8FAFC"/>
-    <SolidColorBrush x:Key="ThemeTextSecondary" Color="#9FA2AA"/>
-    <SolidColorBrush x:Key="ThemeInputBg" Color="#12141A"/>
-    <SolidColorBrush x:Key="ThemeInputBorder" Color="#2D313C"/>
+    <SolidColorBrush x:Key="ThemeTextSecondary" Color="#94A3B8"/>
+    <SolidColorBrush x:Key="ThemeInputBg" Color="#0E1118"/>
+    <SolidColorBrush x:Key="ThemeInputBorder" Color="#242C40"/>
     <SolidColorBrush x:Key="ThemeAccent" Color="#E55337"/>
-    <SolidColorBrush x:Key="ThemeAccentHover" Color="#F06548"/>
-    <SolidColorBrush x:Key="ThemeAccentSubtle" Color="#2A1815"/>
-    <SolidColorBrush x:Key="ThemeHoverBg" Color="#22252E"/>
-    <SolidColorBrush x:Key="ThemeLine" Color="#272B36"/>
+    <SolidColorBrush x:Key="ThemeAccentHover" Color="#F2664B"/>
+    <SolidColorBrush x:Key="ThemeAccentSubtle" Color="#261412"/>
+    <SolidColorBrush x:Key="ThemeHoverBg" Color="#1B2130"/>
+    <SolidColorBrush x:Key="ThemeLine" Color="#202737"/>
+
+    <SolidColorBrush x:Key="ThemeMint" Color="#10B981"/>
+    <SolidColorBrush x:Key="ThemeMintBg" Color="#0C231A"/>
+    <SolidColorBrush x:Key="ThemeMintBorder" Color="#10B981"/>
+
+    <SolidColorBrush x:Key="ThemeIndigo" Color="#6366F1"/>
+    <SolidColorBrush x:Key="ThemeIndigoBg" Color="#181934"/>
+    <SolidColorBrush x:Key="ThemeIndigoBorder" Color="#4338CA"/>
 
     <SolidColorBrush x:Key="ColorSuccess" Color="#10B981"/>
     <SolidColorBrush x:Key="ColorWarning" Color="#F59E0B"/>
@@ -68,6 +76,26 @@
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="CornerRadius" Value="16"/>
       <Setter Property="Padding" Value="22"/>
+    </Style>
+
+    <!-- Bento Grid Card Container (Inspo Tactile Surface & Crisp Border) -->
+    <Style x:Key="BentoCard" TargetType="Border">
+      <Setter Property="Background" Value="{DynamicResource ThemeCardBg}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorder}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="14"/>
+      <Setter Property="Padding" Value="18"/>
+    </Style>
+
+    <Style x:Key="BentoCardElevated" TargetType="Border" BasedOn="{StaticResource BentoCard}">
+      <Setter Property="Background" Value="{DynamicResource ThemeHoverBg}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorder}"/>
+    </Style>
+
+    <Style x:Key="BadgePill" TargetType="Border">
+      <Setter Property="CornerRadius" Value="10"/>
+      <Setter Property="Padding" Value="8,3"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <!-- Buttons -->
